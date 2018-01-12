@@ -6,9 +6,14 @@
   "author": "Hibikine Kage <goodsmile314159@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "webpack",
+    "docker": "docker-compose up --build",
+    "watch": "webpack --watch",
+    "test": "jest",
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "pixi.js": "^4.6.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

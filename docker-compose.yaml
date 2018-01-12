@@ -1,0 +1,29 @@
+version: '3'
+services:
+  rdb:
+    image: "mysql:$MYSQL_VERSION"
+    ports:
+      - "$RDB_PORT:3306"
+    volumes:
+      - "$RDB_DIR:/var/lib/mysql"
+    environment:
+      - "MYSQL_USER=$RDB_USER"
+      - "MYSQL_PASSWORD=$RDB_PASSWORD"
+      - "MYSQL_ROOT_PASSWORD=$RDB_ROOT_PASSWORD"
+  kvs:
+    image: "redis:$REDIS_VERSION"
+    ports:
+      - "$KVS_PORT:6379"
+  php:
+    image: "php:${PHP_VERSION}-apache"
+    volumes:
+      - "$WEBRBOOT:/var/www/html"
+    ports:
+      - "$HTTP_PORT:8080"
+    environment:
+      - "APACHE_DOCUMENT_ROOT=$APACHE_DOCUMENT_ROOT"
+      - "MYSQL_USER=$RDB_USER"
+      - "RDB_PASSWORD=$RDB_PASSWORD"
+    links:
+      - "rdb"
+      - "kvs"

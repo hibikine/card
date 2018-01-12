@@ -34,3 +34,11 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /node_modules/
 /index.js
 yarn-error.log
+
+.env
+rdb_data/*
+!rdb_data/.gitkeep
+vendor/*
+public/*
+!public/index.php
+composer.phar

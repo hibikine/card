@@ -99,14 +99,16 @@
 # Require
 - yarn
 - php
+- Docker
 
 # Install
 ```bash
+composer install
 yarn install
 ```
 
 # Run
 ```bash
+yarn docker
 yarn watch
-yarn server
 ```
