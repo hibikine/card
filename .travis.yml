@@ -1,0 +1,18 @@
+language: php
+php:
+  - '7.1'
+cache:
+  yarn: true
+  directories:
+    - node_modules
+before_install:
+  - nvm install 'node'
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH="$HOME/.yarn/bin:$PATH"
+  - yarn install
+install:
+  - composer install
+  - yarn install
+script:
+  - mkdir -p build/logs
+  - phpunit --coverage-clover build/logs/clover.xml --configuration application/tests/phpunit.xml tests
