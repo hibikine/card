@@ -5,6 +5,9 @@
   "repository": "https://github.com/HibikineKage/card",
   "author": "Hibikine Kage <goodsmile314159@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "precommit": "lint-staged"
+  },
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -21,8 +24,11 @@
     "@types/react-redux": "^5.0.14",
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^7.0.0-0",
+    "husky": "^0.14.3",
     "jest": "^22.0.6",
+    "lint-staged": "^6.0.0",
     "node-sass": "^4.7.2",
+    "prettier": "^1.10.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
     "ts-jest": "^22.0.1",
@@ -49,6 +55,13 @@
       "jsx",
       "json",
       "node"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier-eslint --write",
+      "eslint",
+      "git add"
     ]
   }
 }
