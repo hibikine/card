@@ -15,4 +15,5 @@ install:
   - yarn install
 script:
   - mkdir -p build/logs
+  - yarn test
   - phpunit --coverage-clover build/logs/clover.xml --configuration application/tests/phpunit.xml tests
