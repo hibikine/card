@@ -1,78 +1,35 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
+const merge = require('webpack-merge');
 const path = require('path');
+const baseConfig = require('./webpack.config.base.js');
 
-module.exports = {
-  entry: path.resolve(__dirname, 'src/index.tsx'),
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'index.js'
-  },
+module.exports = merge(baseConfig, {
   devtool: 'source-map',
   module: {
     /* ファイルローダーなどの設定 */
     rules: [
-      {
-        /* JavaScriptファイル */
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env']
-              //plugins: [require('@babel/plugin-transform-object-rest-spread')]
-            }
-          }
-        ],
-      },
-      /* TypeScript */
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'awesome-typescript-loader'
-          }
-        ],
-        exclude: /node_modules/
-      },
       /* SASS */
       {
         test: /\.scss$/,
         use: [
-          {loader: 'style-loader'},
+          { loader: 'style-loader' },
           {
-            loader: 'css-loader', options: {
-              sourceMap: true
-            }
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
           },
           {
-            loader: 'sass-loader', options: {
-              sourceMap: true
-            }
-          }
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
-  resolve: {
-    extensions: [
-      '.ts',
-      '.tsx',
-      '.js',
-      '.jsx'
-    ]
-  },
-  plugins: [
-    new CheckerPlugin(),
-    new UglifyJsPlugin({
-      cache: true,
-      parallel: true,
-      sourceMap: true,
-      uglifyOptions: {
-        warnings: true
-      }
-    })
-  ],
-};
+  externals: [{ 'pixi.js': 'PIXI' }],
+  plugins: [new CheckerPlugin()],
+});
