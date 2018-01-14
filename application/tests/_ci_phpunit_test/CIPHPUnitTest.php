@@ -15,7 +15,7 @@ class CIPHPUnitTest
 
 	/**
 	 * Initialize CIPHPUnitTest
-	 * 
+	 *
 	 * @param array $autoload_dirs directories to search class file for autoloader
 	 */
 	public static function init(array $autoload_dirs = null)
@@ -24,12 +24,12 @@ class CIPHPUnitTest
 		$_server_backup = $_SERVER;
 		$_SERVER['argv'] = [
 			'index.php',
-			'welcome'	// Dummy
+            'Index'    // Dummy
 		];
 		$_SERVER['argc'] = 2;
 
 		self::$autoload_dirs = $autoload_dirs;
-		
+
 		$cwd_backup = getcwd();
 
 		// Load autoloader for ci-phpunit-test
@@ -87,7 +87,7 @@ class CIPHPUnitTest
 
 		// Restore $_SERVER. We need this for NetBeans
 		$_SERVER = $_server_backup;
-		
+
 		// Restore cwd to use `Usage: phpunit [options] <directory>`
 		chdir($cwd_backup);
 	}
@@ -111,7 +111,7 @@ class CIPHPUnitTest
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -122,7 +122,7 @@ class CIPHPUnitTest
 
 	protected static function replaceLoader()
 	{
-		$my_loader_file = 
+		$my_loader_file =
 			APPPATH . 'core/' . config_item('subclass_prefix') . 'Loader.php';
 
 		if (file_exists($my_loader_file))
