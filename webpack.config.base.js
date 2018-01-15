@@ -21,7 +21,9 @@ module.exports = {
               presets: ['@babel/preset-env'],
               // plugins: [require('@babel/plugin-transform-object-rest-spread')]
             },
-          },
+          },{
+            loader: 'eslint-loader'
+          }
         ],
       },
       /* TypeScript */
@@ -30,7 +32,9 @@ module.exports = {
         use: [
           {
             loader: 'awesome-typescript-loader',
-          },
+          },{
+            loader: 'eslint-loader'
+          }
         ],
         exclude: /node_modules/,
       },
@@ -59,4 +63,5 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
+  plugins: [new CheckerPlugin()]
 };

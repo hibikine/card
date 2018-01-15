@@ -1,3 +1,13 @@
 {
+  "files": [
+    {
+      "patterns": "**/*.jsx?$",
+      "parser": "babel-eslint"
+    },
+    {
+      "patterns": "**/*.tsx?$",
+      "parser": "typescript-eslint-parser"
+    }
+  ]
   "extends": "airbnb"
 }
