@@ -4,11 +4,16 @@ import GameObject from './game-object';
 import {Image} from './files';
 const {resources} = loader;
 
+interface CardStrategy {
+  (cost: number): void;
+}
+
 export default class Card extends GameObject {
   public readonly cardStatus: CardStatus;
   private readonly nameText: Text;
   private readonly costText: Text;
   private readonly picture: Sprite;
+  private readonly cardStrategy: CardStrategy;
   private isFaced: boolean = false;
   constructor(cardStatus: CardStatus) {
     super(resources[Image.Card].texture);
@@ -50,5 +55,9 @@ export default class Card extends GameObject {
         this.picture.visible = false;
       }
     }
+  }
+
+  use(cost: number) {
+    this.cardStrategy(cost);
   }
 }

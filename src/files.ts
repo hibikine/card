@@ -1,6 +1,7 @@
 export enum Image {
   Card = 'img/card/card.png',
   CardBack = 'img/card/card_back.png',
+  Deck = '',
 }
 
 export const ImageFiles = [
