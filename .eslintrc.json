@@ -1,0 +1,5 @@
+{
+  "root": true,
+  "extends": "airbnb",
+  "parser": "typescript-eslint-parser"
+}
