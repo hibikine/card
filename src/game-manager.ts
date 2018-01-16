@@ -1,8 +1,8 @@
 import Player from './player';
-import Supply from "./supply";
-import SupplyList from "./supply-list";
-import CardStatusList from "./card-status-list";
-import {randomChoice} from "./utils";
+import Supply from './supply';
+import SupplyList from './supply-list';
+import CardStatusList from './card-status-list';
+import { randomChoice } from './utils';
 
 export default class GameManager {
   private players: Player[];
@@ -18,13 +18,11 @@ export default class GameManager {
       playerNumber,
       characterSupplies,
       this.cardStatusList.generateEnergySupplies(),
-      this.cardStatusList.generateScoreSupplies()
+      this.cardStatusList.generateScoreSupplies(),
     );
     this.turnPlayer = randomChoice(this.players);
   }
-  update(delta: number) {
-
-  }
+  update(delta: number) {}
 }
 
 export class GameManagerBuilder {

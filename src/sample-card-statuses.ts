@@ -1,5 +1,5 @@
-import {CardStatusObject} from "./card-status-list";
-import {CardType} from "./card-status";
+import { CardStatusObject } from './card-status-list';
+import { CardType } from './card-status';
 
 const sampleCardStatuses: CardStatusObject[] = [
   {
@@ -7,7 +7,7 @@ const sampleCardStatuses: CardStatusObject[] = [
     cost: 2,
     image: 'img/card/nanashi.png',
     type: [CardType.Character],
-    text: 'ウォークマンの774から生まれたうさぎ。'
+    text: 'ウォークマンの774から生まれたうさぎ。',
   },
   {
     name: 'ジョン',
@@ -48,4 +48,3 @@ const sampleCardStatuses: CardStatusObject[] = [
 ];
 
 export default sampleCardStatuses;
-

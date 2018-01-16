@@ -1,15 +1,13 @@
-import {Application, loader} from 'pixi.js';
+import { Application, loader } from 'pixi.js';
 import Card from './card';
-import CardStatus, {CardType} from './card-status';
+import CardStatus, { CardType } from './card-status';
 import GameObject from './game-object';
-import {ImageFiles} from  './files';
-import CardStatusList, {generateSupplies} from "./card-status-list";
-import {default as GameManager, GameManagerBuilder} from "./game-manager";
+import { ImageFiles } from './files';
+import CardStatusList, { generateSupplies } from './card-status-list';
+import { default as GameManager, GameManagerBuilder } from './game-manager';
 import sampleCardStatuses from './sample-card-statuses';
 
-loader
-  .add(ImageFiles)
-  .load(setup);
+loader.add(ImageFiles).load(setup);
 
 const appConfig = {
   width: 640,
@@ -21,9 +19,8 @@ const app = new Application(appConfig);
 document.body.appendChild(app.view);
 app.renderer.backgroundColor = 0xfafafa;
 
-
 let gameObjectList: GameObject[] = [];
-let testCardStatus: CardStatus[] = [];
+const testCardStatus: CardStatus[] = [];
 let gameManager: GameManager;
 
 function setup() {

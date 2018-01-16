@@ -1,14 +1,13 @@
-import {CardType} from "./card-status";
-import CardStatus from "./card-status";
-import {loader} from "pixi.js";
-import Supply from "./supply";
+import CardStatus, { CardType } from './card-status';
+import { loader } from 'pixi.js';
+import Supply from './supply';
 
 export type CardStatusObject = {
-  name: string,
-  cost: number,
-  image: string,
-  type: CardType[],
-  text?: string,
+  name: string;
+  cost: number;
+  image: string;
+  type: CardType[];
+  text?: string;
 };
 
 const defaultCardStatusObject: CardStatusObject[] = [
@@ -51,9 +50,7 @@ const defaultCardStatusObject: CardStatusObject[] = [
 ];
 
 export function generateSupplies(cardStatuses: CardStatus[], size: number = 10) {
-  return cardStatuses.map(v => (
-    new Supply().init(v, size)
-  ));
+  return cardStatuses.map(v => new Supply().init(v, size));
 }
 
 export default class CardStatusList extends Array<CardStatus> {
@@ -63,11 +60,7 @@ export default class CardStatusList extends Array<CardStatus> {
     }
     const cardObjects = [...defaultCardStatusObject, ...additionalCardObjects];
     super(cardObjects.length);
-    this.push(...cardObjects.map(
-      (v, i) => (
-        new CardStatus(i, v.cost, v.name, loader.resources[v.image].texture, v.type)
-      )
-    ));
+    this.push(...cardObjects.map((v, i) => new CardStatus(i, v.cost, v.name, loader.resources[v.image].texture, v.type)));
   }
 
   searchByCardType(cardType: CardType): CardStatus[] {
@@ -75,22 +68,10 @@ export default class CardStatusList extends Array<CardStatus> {
   }
 
   generateEnergySupplies(): Supply[] {
-    return generateSupplies(
-      [CardType.Energy1, CardType.Energy2, CardType.Energy3].map(
-        v => (
-          this.searchByCardType(v)[0]
-        )
-      )
-    );
+    return generateSupplies([CardType.Energy1, CardType.Energy2, CardType.Energy3].map(v => this.searchByCardType(v)[0]));
   }
 
   generateScoreSupplies(): Supply[] {
-    return generateSupplies(
-      [CardType.Score1, CardType.Score2, CardType.Score3].map(
-        v => (
-          this.searchByCardType(v)[0]
-        )
-      )
-    );
+    return generateSupplies([CardType.Score1, CardType.Score2, CardType.Score3].map(v => this.searchByCardType(v)[0]));
   }
 }

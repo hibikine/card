@@ -80,6 +80,16 @@
       "prettier-eslint --write",
       "eslint",
       "git add"
+    ],
+    "*.ts": [
+      "prettier-eslint --write",
+      "eslint",
+      "git add"
+    ],
+    "*.tsx": [
+      "prettier-eslint --write",
+      "eslint",
+      "git add"
     ]
   }
 }

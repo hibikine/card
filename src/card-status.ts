@@ -1,4 +1,4 @@
-import {Texture} from 'pixi.js';
+import { Texture } from 'pixi.js';
 
 export enum CardType {
   Energy = 0,

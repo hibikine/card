@@ -11,11 +11,14 @@ export default class SupplyList extends GameObject {
   /**
    * サプライを初期化する
    */
-  initSupply(playerNumber: number,
-             characterSupplies: Supply[],
-             energySupplies: Supply[],
-             scoreSupplies: Supply[]) {
-    const supplyNumberTable: any = { // TODO:
+  initSupply(
+    playerNumber: number,
+    characterSupplies: Supply[],
+    energySupplies: Supply[],
+    scoreSupplies: Supply[],
+  ) {
+    const supplyNumberTable: any = {
+      // TODO:
       1: {
         characterSupplies: 4,
         energySupplies: {
@@ -27,8 +30,8 @@ export default class SupplyList extends GameObject {
           1: 8,
           2: 4,
           3: 3,
-        }
-      }
+        },
+      },
     };
 
     this.characterSupplies = characterSupplies;
@@ -44,7 +47,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * ゲームのフェーズを指定する
-   * @param {GamePhase} gamePhase
+  {GamePhase} gamePhase
    */
   setGamePhase(gamePhase: GamePhase) {
     this.supplies.map(i => i.setGamePhase(gamePhase));
@@ -52,7 +55,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * 現在のコストを指定し、それぞれのサプライが購入可能かどうか表示する
-   * @param {number} cost
+  {number} cost
    */
   setCost(cost: number) {
     this.supplies.map(i => i.setCost(cost));
@@ -60,7 +63,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * サプライが規定枚数だけ枯渇して終了条件を満たしているか
-   * @returns {boolean}
+  {boolean}
    */
   isSupplyEmptied() {
     return (
