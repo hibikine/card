@@ -4,6 +4,12 @@ export enum CardType {
   Energy = 0,
   Score,
   Character,
+  Energy1,
+  Energy2,
+  Energy3,
+  Score1,
+  Score2,
+  Score3,
 }
 
 export default class CardStatus {

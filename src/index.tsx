@@ -3,6 +3,9 @@ import Card from './card';
 import CardStatus, {CardType} from './card-status';
 import GameObject from './game-object';
 import {ImageFiles} from  './files';
+import CardStatusList, {generateSupplies} from "./card-status-list";
+import {default as GameManager, GameManagerBuilder} from "./game-manager";
+import sampleCardStatuses from './sample-card-statuses';
 
 loader
   .add(ImageFiles)
@@ -18,42 +21,37 @@ const app = new Application(appConfig);
 document.body.appendChild(app.view);
 app.renderer.backgroundColor = 0xfafafa;
 
-const testCardStatusJson = [
-  {
-    name: '1エネルギー',
-    cost: 0,
-    image: 'img/card/1.png',
-    type: [CardType.Energy],
-  },
-  {
-    name: '2エネルギー',
-    cost: 3,
-    image: 'img/card/2.png',
-    type: [CardType.Energy],
-  },
-  {
-    name: '3エネルギー',
-    cost: 6,
-    image: 'img/card/3.png',
-    type: [CardType.Energy],
-  },
-];
-
-function generateTestCardStatus(): CardStatus[] {
-  return testCardStatusJson.map((v, i) => new CardStatus(i, v.cost, v.name, loader.resources[v.image].texture, v.type));
-}
-
 
 let gameObjectList: GameObject[] = [];
 let testCardStatus: CardStatus[] = [];
+let gameManager: GameManager;
 
 function setup() {
+  const cardStatusList = new CardStatusList(sampleCardStatuses);
+  const characterStatuses = [
+    cardStatusList[6],
+    cardStatusList[7],
+    cardStatusList[8],
+    cardStatusList[9],
+    cardStatusList[10],
+    cardStatusList[11],
+    cardStatusList[12],
+    cardStatusList[6],
+    cardStatusList[7],
+    cardStatusList[8],
+  ];
+  const characterSupplies = generateSupplies(characterStatuses);
+  gameManager = new GameManagerBuilder()
+    .playerNumber(4)
+    .cardStatusList(cardStatusList)
+    .supply(characterSupplies)
+    .build();
   app.ticker.add(delta => gameLoop(delta));
-  testCardStatus = generateTestCardStatus();
   app.stage.addChild(new Card(testCardStatus[0]));
 }
 
 function gameLoop(delta: number) {
+  gameManager.update(delta);
   gameObjectList.map(v => v.update(delta));
   gameObjectList = gameObjectList.filter(v => !v.isDestroy);
 }

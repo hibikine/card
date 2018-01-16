@@ -1,6 +1,6 @@
-import GameObject from "./game-object";
+import GameObject from './game-object';
 import Supply from './supply';
-import GamePhase from "./game-phase";
+import GamePhase from './game-phase';
 
 export default class SupplyList extends GameObject {
   private supplies: Supply[] = [];
@@ -11,11 +11,10 @@ export default class SupplyList extends GameObject {
   /**
    * サプライを初期化する
    */
-  initSupply(
-    playerNumber: number,
-    characterSupplies: Supply[],
-    energySupplies: Supply[],
-    scoreSupplies: Supply[]) {
+  initSupply(playerNumber: number,
+             characterSupplies: Supply[],
+             energySupplies: Supply[],
+             scoreSupplies: Supply[]) {
     const supplyNumberTable: any = { // TODO:
       1: {
         characterSupplies: 4,
