@@ -1,28 +1,54 @@
-import GameObject from './game-object';
 import Card from './card';
+import CardList, { CardEventListener } from './card-list';
 
-export default class Hands extends GameObject {
-  private holdings: Card[];
-  add(...cards: Card[]) {
-    this.holdings.push(...cards);
-  }
+export default class Hands extends CardList {
+  private isLocalPlayer: boolean = false;
+  private generatedEventListener: CardEventListener | null = null;
 
-  get cards() {
-    return this.holdings;
+  constructor(cards: Card[]) {
+    super(cards);
+    this.visible = false;
   }
 
   use(card: Card, cost: number = 0) {
-    this.holdings = this.holdings.filter(v => v === card);
+    this.remove(card);
     card.use(cost);
     return card;
   }
 
-  remove(...cards: Card[]) {
-    this.holdings = this.holdings.filter(v => cards.indexOf(v) !== -1);
-    return cards;
+  setLocalPlayer(isLocalPlayer: boolean) {
+    this.isLocalPlayer = isLocalPlayer;
+    if (isLocalPlayer) {
+      this.showHands(true);
+    }
   }
 
-  setVisible(isVisible: boolean): void {
-    // TODO:
+  showHands(isShowHands: boolean) {
+    if (isShowHands) {
+      this.visible = true;
+      this.cards.map((v) => {
+        v.setFace(true);
+        v.visible = true;
+      });
+      this.generatedEventListener = () => {
+        this.render();
+      };
+      this.addCardEventListener(this.generatedEventListener);
+      this.render();
+    } else {
+      this.cards.map(v => v.visible = false);
+      this.deleteCardEventListener(this.generatedEventListener);
+    }
+  }
+
+  render(): void {
+    this.x = 100;
+    this.y = 400;
+    this.cards.map((card, i) => {
+      card.visible = true;
+      card.x = i * 120;
+      card.width = 100;
+      card.height = card.width / card.texture.width * card.texture.height;
+    });
   }
 }

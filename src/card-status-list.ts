@@ -76,4 +76,19 @@ export default class CardStatusList extends Array<CardStatus> {
       [CardType.Score1, CardType.Score2, CardType.Score3]
         .map(v => this.searchByCardType(v)[0]));
   }
+
+  generateInitialDeck(): CardStatus[] {
+    return [
+      this[0],
+      this[0],
+      this[0],
+      this[0],
+      this[0],
+      this[0],
+      this[0],
+      this[3],
+      this[3],
+      this[3],
+    ];
+  }
 }

@@ -1,48 +1,55 @@
 import { loader } from 'pixi.js';
 import { Image } from './files';
 import { randomInt } from './utils';
-import GameObject from './game-object';
 import Card from './card';
+import CardStatus from './card-status';
+import CardList from './card-list';
 
 const { resources } = loader;
 
-export default class Deck extends GameObject {
-  private cards: Card[] = [];
+export default class Deck extends CardList {
+  constructor(initialDeck: CardStatus[]) {
+    super();
+    this.visible = false;
+    this.texture = resources[Image.Deck].texture;
+    this.shuffle(initialDeck.map(v => new Card(v)));
+  }
 
-  constructor() {
-    super(resources[Image.Deck].texture);
+  drawCards(num: number): Card[] {
+    const cards = [];
+    for (let i = 0; i < num; i += 1) {
+      cards.push(this.pop());
+    }
+    return cards;
+  }
+
+  setLocalPlayer(isLocalPlayer: boolean) {
+    this.visible = isLocalPlayer;
+    this.addCardEventListener(() => this.render());
   }
 
   shuffle(addCards?: Card[]) {
-    if (addCards !== undefined) {
+    if (addCards.length > 0) {
       this.cards.push(...addCards);
     }
     const cards: Card[] = this.cards.map((): Card => null);
     for (let i = 0, length = this.cards.length; i < length; i += 1) {
       const rand = randomInt(0, this.cards.length);
       cards[i] = this.cards[rand];
-      this.cards = this.cards.filter((v, num) => num === rand);
+      this.cardList = this.cards.filter((v, num) => num === rand);
     }
-    this.cards = cards;
-    this.renderDeck();
+    this.cardList = cards;
+    this.render();
   }
 
-  renderDeck() {
-    if (this.cards.length === 0) {
+  render() {
+    if (this.isEmpty()) {
       this.texture = null;
     } else {
       this.texture = resources[Image.Deck].texture;
+      this.y = 400;
+      this.width = 100;
+      this.height = this.width * this.texture.height / this.texture.width;
     }
-  }
-
-  pop() {
-    const card = this.cards.pop();
-    this.renderDeck();
-    return card;
-  }
-
-  push(...cards: Card[]) {
-    this.cards.push(...cards);
-    this.renderDeck();
   }
 }

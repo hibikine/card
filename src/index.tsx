@@ -1,5 +1,4 @@
 import { Application, loader } from 'pixi.js';
-import Card from './card';
 import CardStatus from './card-status';
 import GameObject from './game-object';
 import { imageFiles } from './files';
@@ -16,7 +15,6 @@ document.body.appendChild(app.view);
 app.renderer.backgroundColor = 0xfafafa;
 
 let gameObjectList: GameObject[] = [];
-const testCardStatus: CardStatus[] = [];
 let gameManager: GameManager;
 
 function setup() {
@@ -34,18 +32,19 @@ function setup() {
     cardStatusList[8],
   ];
   const characterSupplies = generateSupplies(characterStatuses);
+  const initialDeck = cardStatusList.generateInitialDeck();
 
   gameManager = new GameManagerBuilder()
     .setPlayerNumber(4)
     .setCardStatusList(cardStatusList)
     .setCharacterSupply(characterSupplies)
+    .setLocalPlayerPosition(0)
+    .setRoot(app.stage)
+    .setInitialDeck(initialDeck)
     .build();
-  app.ticker.add(delta => gameLoop(delta));
-  app.stage.addChild(new Card(testCardStatus[0]));
-}
-
-function gameLoop(delta: number) {
-  gameManager.update(delta);
-  gameObjectList.map(v => v.update(delta));
-  gameObjectList = gameObjectList.filter(v => !v.isDestroy);
+  app.ticker.add((delta: number) => {
+    gameManager.update(delta);
+    gameObjectList.map(v => v.update(delta));
+    gameObjectList = gameObjectList.filter(v => !v.isDestroy);
+  });
 }
