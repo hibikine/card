@@ -2,23 +2,23 @@ import GameObject from './game-object';
 import Card from './card';
 
 export default class Hands extends GameObject {
-  private _cards: Card[];
+  private holdings: Card[];
   add(...cards: Card[]) {
-    this._cards.push(...cards);
+    this.holdings.push(...cards);
   }
 
   get cards() {
-    return this._cards;
+    return this.holdings;
   }
 
   use(card: Card, cost: number = 0) {
-    this._cards = this._cards.filter(v => v === card);
+    this.holdings = this.holdings.filter(v => v === card);
     card.use(cost);
     return card;
   }
 
   remove(...cards: Card[]) {
-    this._cards = this._cards.filter(v => cards.indexOf(v) !== -1);
+    this.holdings = this.holdings.filter(v => cards.indexOf(v) !== -1);
     return cards;
   }
 

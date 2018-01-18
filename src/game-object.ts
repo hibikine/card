@@ -1,7 +1,7 @@
-import {Sprite, Texture} from "pixi.js";
+import { Sprite, Texture } from 'pixi.js';
 
 export default class GameObject extends Sprite {
-  private _isDestroy: boolean = false;
+  private isGameObjectDestroy: boolean = false;
   constructor(texture?: Texture) {
     super(texture);
   }
@@ -9,10 +9,10 @@ export default class GameObject extends Sprite {
 
   }
   destroy() {
-    this._isDestroy = true;
+    this.isGameObjectDestroy = true;
   }
   get isDestroy(): boolean {
-    return this._isDestroy;
+    return this.isGameObjectDestroy;
   }
   update(delta: number) {
   }

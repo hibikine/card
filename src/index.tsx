@@ -1,18 +1,14 @@
 import { Application, loader } from 'pixi.js';
 import Card from './card';
-import CardStatus, { CardType } from './card-status';
+import CardStatus from './card-status';
 import GameObject from './game-object';
-import { ImageFiles } from './files';
+import { imageFiles } from './files';
 import CardStatusList, { generateSupplies } from './card-status-list';
-import { default as GameManager, GameManagerBuilder } from './game-manager';
+import GameManager, { GameManagerBuilder } from './game-manager';
 import sampleCardStatuses from './sample-card-statuses';
+import appConfig from './app-config';
 
-loader.add(ImageFiles).load(setup);
-
-const appConfig = {
-  width: 640,
-  height: 480,
-};
+loader.add(imageFiles).load(setup);
 
 const app = new Application(appConfig);
 
@@ -38,10 +34,11 @@ function setup() {
     cardStatusList[8],
   ];
   const characterSupplies = generateSupplies(characterStatuses);
+
   gameManager = new GameManagerBuilder()
-    .playerNumber(4)
-    .cardStatusList(cardStatusList)
-    .supply(characterSupplies)
+    .setPlayerNumber(4)
+    .setCardStatusList(cardStatusList)
+    .setCharacterSupply(characterSupplies)
     .build();
   app.ticker.add(delta => gameLoop(delta));
   app.stage.addChild(new Card(testCardStatus[0]));

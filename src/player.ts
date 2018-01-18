@@ -1,5 +1,5 @@
-import GameObject from "./game-object";
-import Hands from "./hands";
+import GameObject from './game-object';
+import Hands from './hands';
 import Deck from './deck';
 
 export default class Player extends GameObject {

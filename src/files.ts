@@ -4,7 +4,7 @@ export enum Image {
   Deck = '',
 }
 
-export const ImageFiles = [
+export const imageFiles = [
   'img/card/1.png',
   'img/card/2.png',
   'img/card/3.png',

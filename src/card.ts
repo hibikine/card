@@ -1,8 +1,8 @@
-import {Sprite, Text, loader} from "pixi.js";
+import { Sprite, Text, loader } from 'pixi.js';
 import CardStatus from './card-status';
 import GameObject from './game-object';
-import {Image} from './files';
-const {resources} = loader;
+import { Image } from './files';
+const { resources } = loader;
 
 interface CardStrategy {
   (cost: number): void;
@@ -19,12 +19,12 @@ export default class Card extends GameObject {
     super(resources[Image.Card].texture);
     this.cardStatus = cardStatus;
 
-    this.nameText = new Text(cardStatus.name, {fontSize: 40});
+    this.nameText = new Text(cardStatus.name, { fontSize: 40 });
     this.nameText.x = 10;
     this.nameText.y = 10;
     this.addChild(this.nameText);
 
-    this.costText = new Text(String(cardStatus.cost), {fontSize: 40});
+    this.costText = new Text(String(cardStatus.cost), { fontSize: 40 });
     this.costText.x = 290;
     this.costText.y = 10;
     this.addChild(this.costText);

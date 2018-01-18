@@ -4,19 +4,19 @@ import GamePhase from './game-phase';
 
 export default class Supply extends GameObject {
   private cardStatus: CardStatus;
-  private _size: number;
+  private supplySize: number;
   private gamePhase: GamePhase = GamePhase.Summon;
   init(cardStatus: CardStatus, size: number = 10) {
     this.cardStatus = cardStatus;
-    this._size = size;
+    this.supplySize = size;
     this.setAvailability(true);
     return this;
   }
   get size() {
-    return this._size;
+    return this.supplySize;
   }
   setSize(size: number): void {
-    this._size = size;
+    this.supplySize = size;
   }
   setGamePhase(gamePhase: GamePhase) {
     this.gamePhase = gamePhase;
@@ -42,6 +42,6 @@ export default class Supply extends GameObject {
     }
   }
   isEmpty(): boolean {
-    return this._size === 0;
+    return this.supplySize === 0;
   }
 }
