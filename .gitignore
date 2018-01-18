@@ -41,4 +41,5 @@ rdb_data/*
 vendor/*
 public/*
 !public/index.php
+!public/img/
 composer.phar
