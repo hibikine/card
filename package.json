@@ -11,7 +11,8 @@
     "watch": "webpack --watch",
     "test": "jest",
     "prettier": "prettier",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "tslint": "tslint --fix **/*.ts"
   },
   "dependencies": {
     "pixi.js": "^4.6.2",
@@ -20,7 +21,8 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.37",
@@ -30,26 +32,24 @@
     "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.14",
+    "@types/socket.io": "^1.4.31",
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^7.0.0-0",
-    "eslint": "^4.15.0",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.5.1",
     "husky": "^0.14.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.0.0",
     "node-sass": "^4.7.2",
+    "prepack": "^0.2.18",
+    "prepack-webpack-plugin": "^1.1.0",
     "prettier": "^1.10.2",
-    "prettier-eslint": "^8.7.4",
-    "prettier-eslint-cli": "^4.7.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
     "ts-jest": "^22.0.1",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.4.2",
+    "tslint-loader": "^3.5.3",
+    "tslint-plugin-prettier": "^1.3.0",
     "typescript": "^2.6.2",
-    "typescript-eslint-parser": "eslint/typescript-eslint-parser",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0",
     "webpack-cli": "^2.0.2",
@@ -77,18 +77,15 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier-eslint --write",
-      "eslint",
+      "yarn tslint",
       "git add"
     ],
     "*.ts": [
-      "prettier-eslint --write",
-      "eslint",
+      "yarn tslint",
       "git add"
     ],
     "*.tsx": [
-      "prettier-eslint --write",
-      "eslint",
+      "yarn tslint",
       "git add"
     ]
   }

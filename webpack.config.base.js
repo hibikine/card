@@ -22,7 +22,7 @@ module.exports = {
               // plugins: [require('@babel/plugin-transform-object-rest-spread')]
             },
           },{
-            loader: 'eslint-loader'
+            loader: 'tslint-loader'
           }
         ],
       },
@@ -31,9 +31,10 @@ module.exports = {
         test: /\.tsx?$/,
         use: [
           {
+            loader: 'tslint-loader'
+          },
+          {
             loader: 'awesome-typescript-loader',
-          },{
-            loader: 'eslint-loader'
           }
         ],
         exclude: /node_modules/,
