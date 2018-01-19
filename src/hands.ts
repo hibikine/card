@@ -7,8 +7,8 @@ export default class Hands extends CardList {
   private isLocalPlayer: boolean = false;
   private generatedEventListener: CardEventListener | null = null;
 
-  constructor(cards: Card[], container: Container) {
-    super(cards, container);
+  constructor(cards: Card[]) {
+    super(cards);
     this.visible = false;
   }
 

@@ -10,7 +10,7 @@ export type CardStatusObject = {
   text?: string;
 };
 
-const defaultCardStatusObject: CardStatusObject[] = [
+export const defaultCardStatusObject: CardStatusObject[] = [
   {
     name: '1エネルギー',
     cost: 0,

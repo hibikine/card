@@ -7,8 +7,8 @@ import Trash from './trash';
 import CardList from './card-list';
 import CardStatus from './card-status';
 import Rules from './rules';
-import Container = PIXI.Container;
 import GamePhase from './game-phase';
+import Container = PIXI.Container;
 
 const { resources } = loader;
 
@@ -25,9 +25,10 @@ export default class Player extends GameObject {
 
   constructor(initialDeck: CardStatus[], root: Container) {
     super(resources[Image.CardBack].texture);
-    this.deck = new Deck(initialDeck, root);
-    this.hands = new Hands(this.deck.drawCards(Rules.InitialDrawCards), root);
-    this.trash = new Trash(root);
+    this.deck = new Deck(initialDeck);
+    const cards = this.deck.drawCards(Rules.InitialDrawCards);
+    this.hands = new Hands(cards);
+    this.trash = new Trash();
     this.handNumber = new Text(
       this.hands.count.toString(),
       { fontSize: 200, fill: 0xffffff });

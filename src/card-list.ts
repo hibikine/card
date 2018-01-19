@@ -9,9 +9,9 @@ export default class CardList extends GameObject {
   private container: Container;
   private eventListener: CardEventListener[] = [];
 
-  constructor(cards: Card[] = [], container: Container) {
+  constructor(cards: Card[] = []) {
     super();
-    this.container = container;
+    this.container = new Container();
     if (cards.length === 1) {
       this.push(cards[0]);
     } else if (cards.length > 1) {

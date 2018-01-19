@@ -1,10 +1,9 @@
 import Card from './card';
 import CardList from './card-list';
-import Container = PIXI.Container;
 
 export default class Trash extends CardList {
-  constructor(container: Container) {
-    super([], container);
+  constructor() {
+    super();
     this.visible = false;
   }
 

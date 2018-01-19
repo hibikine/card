@@ -5,7 +5,6 @@ import SupplyList from './supply-list';
 import CardStatusList from './card-status-list';
 import { randomChoice } from './utils';
 import appConfig from './app-config';
-import Card from './card';
 import CardStatus from './card-status';
 
 export default class GameManager {
@@ -62,11 +61,11 @@ export default class GameManager {
     this.setRoot();
   }
 
-  private setRoot() {
-    this.root.addChild(this.supplyList, ...this.players);
+  update(delta: number) {
   }
 
-  update(delta: number) {
+  private setRoot() {
+    this.root.addChild(this.supplyList, ...this.players);
   }
 }
 
