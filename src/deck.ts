@@ -4,12 +4,13 @@ import { randomInt } from './utils';
 import Card from './card';
 import CardStatus from './card-status';
 import CardList from './card-list';
+import Container = PIXI.Container;
 
 const { resources } = loader;
 
 export default class Deck extends CardList {
-  constructor(initialDeck: CardStatus[]) {
-    super();
+  constructor(initialDeck: CardStatus[], container: Container) {
+    super([], container);
     this.visible = false;
     this.texture = resources[Image.Deck].texture;
     this.shuffle(initialDeck.map(v => new Card(v)));
@@ -33,8 +34,8 @@ export default class Deck extends CardList {
       this.cards.push(...addCards);
     }
     const cards: Card[] = this.cards.map((): Card => null);
-    for (let i = 0, length = this.cards.length; i < length; i += 1) {
-      const rand = randomInt(0, this.cards.length);
+    for (let i = 0, length = this.count; i < length; i += 1) {
+      const rand = randomInt(0, this.count);
       cards[i] = this.cards[rand];
       this.cardList = this.cards.filter((v, num) => num === rand);
     }

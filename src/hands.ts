@@ -1,12 +1,14 @@
 import Card from './card';
 import CardList, { CardEventListener } from './card-list';
+import AppConfig from './app-config';
+import Container = PIXI.Container;
 
 export default class Hands extends CardList {
   private isLocalPlayer: boolean = false;
   private generatedEventListener: CardEventListener | null = null;
 
-  constructor(cards: Card[]) {
-    super(cards);
+  constructor(cards: Card[], container: Container) {
+    super(cards, container);
     this.visible = false;
   }
 
@@ -46,9 +48,14 @@ export default class Hands extends CardList {
     this.y = 400;
     this.cards.map((card, i) => {
       card.visible = true;
-      card.x = i * 120;
       card.width = 100;
       card.height = card.width / card.texture.width * card.texture.height;
+      // カードがはみ出す場合
+      if (AppConfig.width - this.x - card.width * this.count < 0) {
+        card.x = AppConfig.width * i / this.count;
+      } else {
+        card.x = i * 120;
+      }
     });
   }
 }

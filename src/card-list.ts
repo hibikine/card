@@ -1,18 +1,21 @@
 import GameObject from './game-object';
 import Card from './card';
+import Container = PIXI.Container;
 
-export interface CardEventListener {
-  (cardList: CardList): void;
-}
+export type CardEventListener = (cardList: CardList) => void;
 
 export default class CardList extends GameObject {
   protected cardList: Card[] = [];
+  private container: Container;
   private eventListener: CardEventListener[] = [];
 
-  constructor(cards: Card[] = []) {
+  constructor(cards: Card[] = [], container: Container) {
     super();
-    if (cards.length > 0) {
-      cards.map(v => this.push(v));
+    this.container = container;
+    if (cards.length === 1) {
+      this.push(cards[0]);
+    } else if (cards.length > 1) {
+      this.push(cards[0], ...cards.slice(1, cards.length));
     }
   }
 
@@ -43,7 +46,7 @@ export default class CardList extends GameObject {
   }
 
   addChildCard(card: Card, ...cards: Card[]) {
-    this.addChild(card, ...cards);
+    this.container.addChild(card, ...cards);
   }
 
   push_back(card: Card, ...cards: Card[]) {

@@ -6,6 +6,7 @@ import CardStatusList, { generateSupplies } from './card-status-list';
 import GameManager, { GameManagerBuilder } from './game-manager';
 import sampleCardStatuses from './sample-card-statuses';
 import appConfig from './app-config';
+import Card from './card';
 
 loader.add(imageFiles).load(setup);
 

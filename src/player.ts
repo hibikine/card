@@ -8,6 +8,7 @@ import CardList from './card-list';
 import CardStatus from './card-status';
 import Rules from './rules';
 import Container = PIXI.Container;
+import GamePhase from './game-phase';
 
 const { resources } = loader;
 
@@ -17,12 +18,16 @@ export default class Player extends GameObject {
   private handNumber: Text;
   private trash: Trash;
   private isLocalPlayer: boolean = false;
+  private summonableCount: number = 0;
+  private energy: number = 0;
+  private buyableCount: number = 0;
+  private phase: GamePhase = GamePhase.Summon;
 
   constructor(initialDeck: CardStatus[], root: Container) {
     super(resources[Image.CardBack].texture);
-    this.deck = new Deck(initialDeck);
-    this.hands = new Hands(this.deck.drawCards(Rules.InitialDrawCards));
-    this.trash = new Trash();
+    this.deck = new Deck(initialDeck, root);
+    this.hands = new Hands(this.deck.drawCards(Rules.InitialDrawCards), root);
+    this.trash = new Trash(root);
     this.handNumber = new Text(
       this.hands.count.toString(),
       { fontSize: 200, fill: 0xffffff });
@@ -38,6 +43,9 @@ export default class Player extends GameObject {
     );
 
     this.hands.addCardEventListener(hands => this.setCardNumber(hands));
+  }
+
+  nextPhase() {
   }
 
   setCardNumber(hands: CardList) {
