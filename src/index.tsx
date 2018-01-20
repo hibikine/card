@@ -1,12 +1,10 @@
 import { Application, loader } from 'pixi.js';
-import CardStatus from './card-status';
 import GameObject from './game-object';
 import { imageFiles } from './files';
 import CardStatusList, { generateSupplies } from './card-status-list';
 import GameManager, { GameManagerBuilder } from './game-manager';
 import sampleCardStatuses from './sample-card-statuses';
 import appConfig from './app-config';
-import Card from './card';
 
 loader.add(imageFiles).load(setup);
 
