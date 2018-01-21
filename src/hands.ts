@@ -42,7 +42,7 @@ export default class Hands extends CardList {
     if (this.isLocalPlayer && this.isShowHands) {
       this.visible = true;
       this.cards.map((card) => {
-        card.visible = true;
+        card.setVisible(true);
         setWidthWithTextureAspect(card, appConfig.width / 10);
       });
       setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);

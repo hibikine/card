@@ -1,18 +1,20 @@
-import { Sprite, Text, loader } from 'pixi.js';
+import { Sprite, Text, loader, interaction } from 'pixi.js';
 import CardStatus from './card-status';
 import GameObject from './game-object';
 import { Image } from './files';
 import { setWidthWithTextureAspect } from './sprite-utils';
 import style from './style';
 import { SpriteAndText } from './utils';
-import appConfig from './app-config';
-import DisplayObject = PIXI.DisplayObject;
 import CardDetail from './card-detail';
 
 const { resources } = loader;
 
 interface CardStrategy {
   (cost: number): void;
+}
+
+function hideCardDetail() {
+  Card.cardDetail.visible = false;
 }
 
 export default class Card extends GameObject {
@@ -24,7 +26,9 @@ export default class Card extends GameObject {
   private readonly picture: Sprite;
   private readonly components: SpriteAndText[];
   private readonly cardStrategy: CardStrategy;
-  private isFaced: boolean = false;
+  private isFaced: boolean = true;
+  private mouseover: () => void;
+  private mouseout: () => void;
 
   constructor(cardStatus: CardStatus) {
     super();
@@ -56,6 +60,7 @@ export default class Card extends GameObject {
     this.components = [this.sprite, this.nameText, this.costText, this.picture];
 
     setWidthWithTextureAspect(this.sprite, style.card.sprite.width);
+    this.render();
   }
 
   setFace(isFaced: boolean) {
@@ -73,6 +78,7 @@ export default class Card extends GameObject {
         this.picture.visible = false;
       }
     }
+    this.render();
   }
 
   get tint(): number {
@@ -80,7 +86,6 @@ export default class Card extends GameObject {
   }
 
   set tint(tint: number) {
-
     this.components.map((component: SpriteAndText) => {
       component.tint = tint;
     });
@@ -90,7 +95,32 @@ export default class Card extends GameObject {
     return this.sprite.texture;
   }
 
+  setVisible(visible: boolean) {
+    this.visible = visible;
+    this.render();
+  }
+
   use(cost: number) {
     this.cardStrategy(cost);
+  }
+
+  showCardDetail() {
+    if (this.worldVisible && this.isFaced) {
+      Card.cardDetail.visible = true;
+      Card.cardDetail.cardStatus = this.cardStatus;
+    } else {
+      this.mouseover = () => {};
+      this.mouseout = () => {};
+    }
+  }
+
+  render() {
+    if (this.isFaced) {
+      this.interactive = true;
+      this.mouseover = this.showCardDetail.bind(this);
+      this.mouseout = hideCardDetail;
+    } else {
+      this.interactive = false;
+    }
   }
 }

@@ -31,10 +31,10 @@ module.exports = {
         test: /\.tsx?$/,
         use: [
           {
-            loader: 'tslint-loader'
+            loader: 'awesome-typescript-loader',
           },
           {
-            loader: 'awesome-typescript-loader',
+            loader: 'tslint-loader'
           }
         ],
         exclude: /node_modules/,
@@ -64,5 +64,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
-  plugins: [new CheckerPlugin()]
+  plugins: [
+    new CheckerPlugin(),
+  ]
 };

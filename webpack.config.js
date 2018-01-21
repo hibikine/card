@@ -1,9 +1,15 @@
 const merge = require('webpack-merge');
 const path = require('path');
 const baseConfig = require('./webpack.config.base.js');
+const webpack = require('webpack');
 
 module.exports = merge(baseConfig, {
   devtool: 'source-map',
+  devServer: {
+    contentBase: 'public',
+    inline: true,
+    hot: true
+  },
   module: {
     /* ファイルローダーなどの設定 */
     rules: [
@@ -30,4 +36,7 @@ module.exports = merge(baseConfig, {
     ],
   },
   externals: [{ 'pixi.js': 'PIXI' }],
+  plugins:[
+    new webpack.HotModuleReplacementPlugin(),
+  ]
 });
