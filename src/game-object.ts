@@ -1,5 +1,4 @@
-import { Sprite, Texture } from 'pixi.js';
-import Container = PIXI.Container;
+import { Container } from 'pixi.js';
 
 export default class GameObject extends Container {
   private isGameObjectDestroy: boolean = false;
