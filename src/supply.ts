@@ -7,6 +7,7 @@ import Texture = PIXI.Texture;
 
 export default class Supply extends GameObject {
   public card: Card;
+  private cost: number = 0;
   private cardStatus: CardStatus;
   private supplySize: number;
   private gamePhase: GamePhase = GamePhase.Summon;
@@ -42,26 +43,16 @@ export default class Supply extends GameObject {
 
   setGamePhase(gamePhase: GamePhase) {
     this.gamePhase = gamePhase;
-    switch (gamePhase) {
-      case GamePhase.Buy:
-        this.setAvailability(false);
-        break;
-
-      default:
-        this.setAvailability(true);
-    }
+    this.render();
   }
 
   setCost(cost: number) {
-    if (cost >= this.cardStatus.cost) {
-      this.setAvailability(true);
-    } else {
-      this.setAvailability(false);
-    }
+    this.cost = cost;
+    this.render();
   }
 
   setAvailability(isAvailable: boolean) {
-    if (!isAvailable) {
+    if (isAvailable) {
       this.card.tint = 0xffffff;
     } else {
       this.card.tint = 0xaaaaaa;
@@ -78,5 +69,10 @@ export default class Supply extends GameObject {
 
   render() {
     this.numberText.text = this.size.toString();
+    if (this.cost < this.cardStatus.cost && this.gamePhase === GamePhase.Buy) {
+      this.setAvailability(false);
+    } else {
+      this.setAvailability(true);
+    }
   }
 }
