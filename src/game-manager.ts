@@ -4,6 +4,8 @@ import SupplyList from './supply-list';
 import CardStatusList from './card-status-list';
 import CardStatus from './card-status';
 import PlayerManager from './player-manager';
+import CardDetail from './card-detail';
+import Card from './card';
 
 export default class GameManager {
   private playerManager: PlayerManager;
@@ -46,7 +48,6 @@ export default class GameManager {
       );
     }
 
-
     // サプライの初期化
     this.supplyList.initSupply(
       playerNumber,
@@ -55,9 +56,11 @@ export default class GameManager {
       this.cardStatusList.generateScoreSupplies(),
     );
 
+    Card.cardDetail = new CardDetail();
+
     // addChild
     this.root = root;
-    this.setRoot();
+    this.root.addChild(this.supplyList, this.playerManager, Card.cardDetail);
   }
 
   /**
@@ -66,9 +69,5 @@ export default class GameManager {
    */
   update(delta: number) {
     this.playerManager.update(delta);
-  }
-
-  private setRoot() {
-    this.root.addChild(this.supplyList, this.playerManager);
   }
 }

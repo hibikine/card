@@ -6,52 +6,48 @@ import { setWidthWithTextureAspect } from './sprite-utils';
 
 export default class Hands extends CardList {
   private isLocalPlayer: boolean = false;
+  private isShowHands: boolean = true;
   private generatedEventListener: CardEventListener | null = null;
+  public readonly fields: CardList;
 
   constructor(cards: Card[]) {
     super(cards);
-    cards.map(card => this.addChild(card));
     this.visible = false;
     this.addCardEventListener(this.render.bind(this));
+    this.fields = new CardList();
+    this.addChild(this.fields);
+    this.render();
   }
 
   use(card: Card, cost: number = 0) {
     this.remove(card);
     card.use(cost);
-    return card;
+    return this.fields.push(card);
   }
 
   setLocalPlayer(isLocalPlayer: boolean) {
     this.isLocalPlayer = isLocalPlayer;
     if (isLocalPlayer) {
-      this.showHands(true);
+      this.setShowHands(true);
     }
+    this.render();
   }
 
-  showHands(isShowHands: boolean) {
-    if (isShowHands) {
-      this.visible = true;
-      this.cards.map((v) => {
-        v.setFace(true);
-        v.visible = true;
-      });
-      this.generatedEventListener = () => {
-        this.render();
-      };
-      this.addCardEventListener(this.generatedEventListener);
-      this.render();
-    } else {
-      this.cards.map(v => v.visible = false);
-      this.deleteCardEventListener(this.generatedEventListener);
-    }
+  setShowHands(isShowHands: boolean) {
+    this.isShowHands = isShowHands;
+    this.render();
   }
 
   render(): void {
-    this.x = 100;
-    this.y = 400;
-    this.cards.map((card) => {
-      setWidthWithTextureAspect(card, appConfig.width / 10);
-    });
-    setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
+    if (this.isLocalPlayer && this.isShowHands) {
+      this.visible = true;
+      this.cards.map((card) => {
+        card.visible = true;
+        setWidthWithTextureAspect(card, appConfig.width / 10);
+      });
+      setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
+    } else {
+      this.visible = false;
+    }
   }
 }

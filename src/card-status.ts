@@ -18,11 +18,20 @@ export default class CardStatus {
   public readonly name: string;
   public readonly texture: Texture;
   public readonly type: CardType[];
-  constructor(id: number, cost: number, name: string, texture: Texture, type: CardType[]) {
+  public readonly text: string;
+  constructor(
+    id: number,
+    cost: number,
+    name: string,
+    texture: Texture,
+    type: CardType[],
+    text: string = '',
+  ) {
     this.id = id;
     this.cost = cost;
     this.name = name;
     this.texture = texture;
     this.type = type;
+    this.text = text;
   }
 }

@@ -6,12 +6,10 @@ export type CardEventListener = (cardList: CardList) => void;
 
 export default class CardList extends GameObject {
   protected cardList: Card[] = [];
-  private container: Container;
   private eventListener: CardEventListener[] = [];
 
   constructor(cards: Card[] = []) {
     super();
-    this.container = new Container();
     if (cards.length === 1) {
       this.push(cards[0]);
     } else if (cards.length > 1) {
@@ -43,10 +41,11 @@ export default class CardList extends GameObject {
     this.cardList.push(card, ...cards);
     this.addChildCard(card, ...cards);
     this.sendEvent();
+    return card;
   }
 
   addChildCard(card: Card, ...cards: Card[]) {
-    this.container.addChild(card, ...cards);
+    this.addChild(card, ...cards);
   }
 
   push_back(card: Card, ...cards: Card[]) {

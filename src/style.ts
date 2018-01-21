@@ -1,4 +1,11 @@
+import appConfig from './app-config';
+
 const style = {
+  player: {
+    handNumberText: {
+      style: { fontSize: 100, fill: 0xffffff },
+    },
+  },
   card: {
     costText: {
       style: { fontSize: 40 },
@@ -13,7 +20,9 @@ const style = {
       y: 5,
     },
     picture: {
-      get width() { return style.card.sprite.width - 20; },
+      get width() {
+        return style.card.sprite.width - 20;
+      },
       x: 10,
       y: 50,
     },
@@ -26,6 +35,10 @@ const style = {
       y: 160,
       scaleX: 1.1,
     },
+  },
+  cardDetail: {
+    x: appConfig.width,
+    y: appConfig.height,
   },
 };
 

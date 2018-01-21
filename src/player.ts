@@ -12,6 +12,7 @@ import Container = PIXI.Container;
 import Sprite = PIXI.Sprite;
 import appConfig from './app-config';
 import { setWidthWithTextureAspect } from './sprite-utils';
+import style from './style';
 
 const { resources } = loader;
 
@@ -52,7 +53,7 @@ export default class Player extends GameObject {
     {
       this.handNumberText = new Text(
         this.hands.count.toString(),
-        { fontSize: 100, fill: 0xffffff });
+        style.player.handNumberText.style);
 
       const { handNumberText, sprite } = this;
       handNumberText.anchor.set(1, 1);
@@ -140,6 +141,9 @@ export default class Player extends GameObject {
     this.phaseWait -= 1;
     // 次フェーズへ
     if (this.phaseWait <= 0) {
+      const handCards = this.hands.clear();
+      const fieldCards = this.hands.fields.clear();
+      [...handCards, ...fieldCards].map(card => this.trash.push(card));
       this.phaseWait = 60;
       this.phase = GamePhase.EndOfTurn;
       return GamePhase.EndOfTurn;

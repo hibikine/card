@@ -7,6 +7,7 @@ import style from './style';
 import { SpriteAndText } from './utils';
 import appConfig from './app-config';
 import DisplayObject = PIXI.DisplayObject;
+import CardDetail from './card-detail';
 
 const { resources } = loader;
 
@@ -15,6 +16,7 @@ interface CardStrategy {
 }
 
 export default class Card extends GameObject {
+  public static cardDetail: CardDetail;
   public readonly cardStatus: CardStatus;
   private readonly sprite: Sprite;
   private readonly nameText: Text;
