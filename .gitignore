@@ -35,7 +35,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /index.js
 yarn-error.log
 
-.env
 rdb_data/*
 !rdb_data/.gitkeep
 vendor/*
