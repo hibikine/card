@@ -1,7 +1,8 @@
 import Card from './card';
 import CardList, { CardEventListener } from './card-list';
-import AppConfig from './app-config';
-import Container = PIXI.Container;
+import appConfig from './app-config';
+import setCardsPosition from './set-supplies-position';
+import { setWidthWithTextureAspect } from './sprite-utils';
 
 export default class Hands extends CardList {
   private isLocalPlayer: boolean = false;
@@ -9,7 +10,9 @@ export default class Hands extends CardList {
 
   constructor(cards: Card[]) {
     super(cards);
+    cards.map(card => this.addChild(card));
     this.visible = false;
+    this.addCardEventListener(this.render.bind(this));
   }
 
   use(card: Card, cost: number = 0) {
@@ -46,16 +49,9 @@ export default class Hands extends CardList {
   render(): void {
     this.x = 100;
     this.y = 400;
-    this.cards.map((card, i) => {
-      card.visible = true;
-      card.width = 100;
-      card.height = card.width / card.texture.width * card.texture.height;
-      // カードがはみ出す場合
-      if (AppConfig.width - this.x - card.width * this.count < 0) {
-        card.x = AppConfig.width * i / this.count;
-      } else {
-        card.x = i * 120;
-      }
+    this.cards.map((card) => {
+      setWidthWithTextureAspect(card, appConfig.width / 10);
     });
+    setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
   }
 }

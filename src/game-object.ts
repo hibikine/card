@@ -1,9 +1,10 @@
 import { Sprite, Texture } from 'pixi.js';
+import Container = PIXI.Container;
 
-export default class GameObject extends Sprite {
+export default class GameObject extends Container {
   private isGameObjectDestroy: boolean = false;
-  constructor(texture?: Texture) {
-    super(texture);
+  constructor() {
+    super();
   }
   dispose() {
 

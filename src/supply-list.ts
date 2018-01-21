@@ -1,6 +1,12 @@
 import GameObject from './game-object';
 import Supply from './supply';
 import GamePhase from './game-phase';
+import appConfig from './app-config';
+import supplyNumberTable from './supply-number-table';
+import setSuppliesPosition, { defaultValue } from './set-supplies-position';
+import { last } from './utils';
+import { setWidthWithTextureAspect } from './sprite-utils';
+import style from './style';
 
 export default class SupplyList extends GameObject {
   private supplies: Supply[] = [];
@@ -11,48 +17,38 @@ export default class SupplyList extends GameObject {
   /**
    * サプライを初期化する
    */
-  initSupply(
-    playerNumber: number,
-    characterSupplies: Supply[],
-    energySupplies: Supply[],
-    scoreSupplies: Supply[],
-  ) {
-    const supplyNumberTable: any = {
-      // TODO:
-      1: {
-        characterSupplies: 4,
-        energySupplies: {
-          1: 20,
-          2: 10,
-          3: 5,
-        },
-        scoreSupplies: {
-          1: 8,
-          2: 4,
-          3: 3,
-        },
-      },
-      4: {
-        characterSupplies: 7,
-        energySupplies: {
-          1: 20,
-          2: 10,
-          3: 5,
-        },
-        scoreSupplies: {
-          1: 8,
-          2: 4,
-          3: 3,
-        },
-      },
-    };
+  initSupply(playerNumber: number,
+             characterSupplies: Supply[],
+             energySupplies: Supply[],
+             scoreSupplies: Supply[]) {
 
     this.characterSupplies = characterSupplies;
     this.energySupplies = energySupplies;
     this.scoreSupplies = scoreSupplies;
+
+    // 全部のサプライをまとめた配列に入れる
     this.supplies.push(...this.characterSupplies);
     this.supplies.push(...this.energySupplies);
     this.supplies.push(...this.scoreSupplies);
+
+    this.supplies.map(s => this.addChild(s));
+
+    // カードサイズ
+    this.supplies.map((supply) => {
+      setWidthWithTextureAspect(supply,  appConfig.width / 9);
+    });
+
+    // サプライの位置
+    {
+      const y = style.supplyList.characterSupplies.y;
+      const scaleX = style.supplyList.characterSupplies.scaleX;
+      setSuppliesPosition(this.characterSupplies, 2, 0, y, scaleX);
+
+      const lastCard = last(this.characterSupplies);
+      const offsetX = lastCard.x + lastCard.width * scaleX;
+      setSuppliesPosition(this.energySupplies, 1, offsetX, y, scaleX);
+      setSuppliesPosition(this.scoreSupplies, 1, offsetX, lastCard.y, scaleX);
+    }
 
     this.characterSupplies.map(v => v.setSize(supplyNumberTable[playerNumber].characterSupplies));
     // TODO:
@@ -60,7 +56,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * ゲームのフェーズを指定する
-  {GamePhase} gamePhase
+   {GamePhase} gamePhase
    */
   setGamePhase(gamePhase: GamePhase) {
     this.supplies.map(i => i.setGamePhase(gamePhase));
@@ -68,7 +64,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * 現在のコストを指定し、それぞれのサプライが購入可能かどうか表示する
-  {number} cost
+   {number} cost
    */
   setCost(cost: number) {
     this.supplies.map(i => i.setCost(cost));
@@ -76,7 +72,7 @@ export default class SupplyList extends GameObject {
 
   /**
    * サプライが規定枚数だけ枯渇して終了条件を満たしているか
-  {boolean}
+   {boolean}
    */
   isSupplyEmptied() {
     return (

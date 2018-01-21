@@ -4,14 +4,19 @@ import { randomInt } from './utils';
 import Card from './card';
 import CardStatus from './card-status';
 import CardList from './card-list';
+import Sprite = PIXI.Sprite;
+import { setWidthWithTextureAspect } from './sprite-utils';
+import appConfig from './app-config';
 
 const { resources } = loader;
 
 export default class Deck extends CardList {
+  private readonly sprite: Sprite;
   constructor(initialDeck: CardStatus[]) {
     super();
     this.visible = false;
-    this.texture = resources[Image.Deck].texture;
+    this.sprite = new Sprite(resources[Image.Deck].texture);
+    this.addChild(this.sprite);
     this.shuffle(initialDeck.map(v => new Card(v)));
   }
 
@@ -44,12 +49,11 @@ export default class Deck extends CardList {
 
   render() {
     if (this.isEmpty()) {
-      this.texture = null;
+      this.sprite.texture = null;
     } else {
-      this.texture = resources[Image.Deck].texture;
-      this.y = 400;
-      this.width = 100;
-      this.height = this.width * this.texture.height / this.texture.width;
+      this.sprite.texture = resources[Image.Deck].texture;
+      this.sprite.y = 400;
+      setWidthWithTextureAspect(this.sprite, appConfig.width / 20);
     }
   }
 }

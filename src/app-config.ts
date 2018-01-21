@@ -1,6 +1,6 @@
 const appConfig = {
-  width: 640,
-  height: 480,
+  width: 1024,
+  height: 768,
 };
 
 export default appConfig;
