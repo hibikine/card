@@ -6,6 +6,8 @@ import CardStatusList from './card-status-list';
 import { randomChoice } from './utils';
 import appConfig from './app-config';
 import CardStatus from './card-status';
+import GamePhase from './game-phase';
+import Text = PIXI.Text;
 
 export default class GameManager {
   private players: Player[];
@@ -14,6 +16,7 @@ export default class GameManager {
   private turnPlayer: Player;
   private initialDeck: CardStatus[];
   private root: Container;
+  private turnPlayerText: Text;
 
   constructor() {
     this.supplyList = new SupplyList();
@@ -44,11 +47,10 @@ export default class GameManager {
 
     this.players = [];
     for (let i: number = 0; i < playerNumber; i += 1) {
-      const container = new Container();
-      root.addChild(container);
-      this.players.push(new Player(initialDeck, container));
+      this.players.push(new Player(initialDeck));
     }
     this.players[localPlayerPosition].setLocalPlayer();
+    this.players.map((p, i) => p.name = `プレイヤー${i}`);
     this.setPlayerPosition();
     this.supplyList.initSupply(
       playerNumber,
@@ -57,11 +59,27 @@ export default class GameManager {
       this.cardStatusList.generateScoreSupplies(),
     );
     this.turnPlayer = randomChoice(this.players);
+    this.turnPlayer.initTurn();
+    this.turnPlayerText = new Text(this.turnPlayer.name, { fontSize: 40 });
     this.root = root;
     this.setRoot();
   }
 
+  render() {
+    this.turnPlayerText.text = this.turnPlayer.name;
+  }
+
   update(delta: number) {
+    this.turnPlayer.update(delta);
+    if (this.turnPlayer.getPhase() === GamePhase.EndOfTurn) {
+      // ターンプレイヤーを1つ進める
+      this.turnPlayer = this.players.reduce((accumlator, player, index): Player => {
+        if (player === this.turnPlayer) {
+          return this.players[(index + 1) % this.players.length];
+        }
+      },                                    null);
+      this.render();
+    }
   }
 
   private setRoot() {
