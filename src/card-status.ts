@@ -19,6 +19,7 @@ export default class CardStatus {
   public readonly texture: Texture;
   public readonly type: CardType[];
   public readonly text: string;
+  public readonly value: number;
   constructor(
     id: number,
     cost: number,
@@ -26,6 +27,7 @@ export default class CardStatus {
     texture: Texture,
     type: CardType[],
     text: string = '',
+    value: number = 0,
   ) {
     this.id = id;
     this.cost = cost;
@@ -33,5 +35,7 @@ export default class CardStatus {
     this.texture = texture;
     this.type = type;
     this.text = text;
+    this.value = value;
+
   }
 }

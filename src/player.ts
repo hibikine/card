@@ -1,32 +1,33 @@
 import GameObject from './game-object';
 import Hands from './hands';
 import Deck from './deck';
-import { loader, Text } from 'pixi.js';
+import { loader, Sprite, Text } from 'pixi.js';
 import { Image } from './files';
 import Trash from './trash';
-import CardList from './card-list';
-import CardStatus from './card-status';
+import CardStatus, { CardType } from './card-status';
 import Rules from './rules';
 import GamePhase from './game-phase';
-import Container = PIXI.Container;
-import Sprite = PIXI.Sprite;
 import appConfig from './app-config';
 import { setWidthWithTextureAspect } from './sprite-utils';
 import style from './style';
+import PlayerStrategy from './player-strategy';
 
 const { resources } = loader;
 
+type PhaseEvent = (currentPhase: GamePhase, nextPhase: GamePhase) => void;
+
 export default class Player extends GameObject {
+  public playerStrategy: PlayerStrategy;
+  public phaseEvent: PhaseEvent[] = [];
   private sprite: Sprite;
   private hands: Hands;
   private deck: Deck;
   private trash: Trash;
-
   private handNumberText: Text;
   private nameText: Text;
-
   private playerNumber: number;
   private isLocalPlayer: boolean = false;
+  private localPlayerText: Text;
   private summonableCount: number = 0;
   private energy: number = 0;
   private buyableCount: number = 0;
@@ -36,11 +37,14 @@ export default class Player extends GameObject {
     [GamePhase.Summon, this.summonPhase.bind(this)],
     [GamePhase.Buy, this.buyPhase.bind(this)],
     [GamePhase.CleanUp, this.cleanUpPhase.bind(this)],
-    [GamePhase.EndOfTurn, this.initTurn.bind(this)],
+    [GamePhase.EndOfTurn, () => {
+    }],
   ]);
 
   constructor(initialDeck: CardStatus[]) {
     super();
+
+    this.playerStrategy = new PlayerStrategy(this);
 
     this.sprite = new Sprite(resources[Image.CardBack].texture);
     this.sprite.y = 40;
@@ -72,6 +76,12 @@ export default class Player extends GameObject {
       sprite.addChild(nameText);
     }
 
+    this.localPlayerText = new Text('あなた', { fontSize: 50, fill: 0xffffff });
+    this.localPlayerText.position.set(0, 50);
+    this.localPlayerText.visible = false;
+    this.localPlayerText.anchor.set(0, 0);
+    this.sprite.addChild(this.localPlayerText);
+
     this.addChild(
       this.sprite,
       this.hands,
@@ -96,10 +106,6 @@ export default class Player extends GameObject {
     return number;
   }
 
-  private nextPhase() {
-    return this.phaseStrategy.get(this.phase)();
-  }
-
   public getPhase() {
     return this.phase;
   }
@@ -109,45 +115,12 @@ export default class Player extends GameObject {
     this.summonableCount = 1;
     this.buyableCount = 1;
     this.energy = 0;
-    this.phase = GamePhase.Summon;
+
+    const nextPhase = GamePhase.Summon;
+    this.phaseChangeEventCallIfNeed(nextPhase);
+    this.phase = nextPhase;
+
     return GamePhase.Summon;
-  }
-
-  private summonPhase() {
-    if (this.summonableCount < 0) {
-      this.phaseWait -= 1;
-    }
-    // 次フェーズへ
-    if (this.phaseWait <= 0) {
-      this.phaseWait = 60;
-      this.phase = GamePhase.Buy;
-      return GamePhase.Buy;
-    }
-  }
-
-  private buyPhase() {
-    if (this.buyableCount < 0) {
-      this.phaseWait -= 1;
-    }
-    // 次フェーズへ
-    if (this.phaseWait <= 0) {
-      this.phaseWait = 60;
-      this.phase = GamePhase.CleanUp;
-      return GamePhase.CleanUp;
-    }
-  }
-
-  private cleanUpPhase() {
-    this.phaseWait -= 1;
-    // 次フェーズへ
-    if (this.phaseWait <= 0) {
-      const handCards = this.hands.clear();
-      const fieldCards = this.hands.fields.clear();
-      [...handCards, ...fieldCards].map(card => this.trash.push(card));
-      this.phaseWait = 60;
-      this.phase = GamePhase.EndOfTurn;
-      return GamePhase.EndOfTurn;
-    }
   }
 
   public setCardNumber(count: number) {
@@ -161,6 +134,7 @@ export default class Player extends GameObject {
       this.trash,
       this.deck,
     ].map(cardList => cardList.setLocalPlayer(isLocalPlayer));
+    this.localPlayerText.visible = isLocalPlayer;
   }
 
   public draw(num: number = 1) {
@@ -179,7 +153,69 @@ export default class Player extends GameObject {
 
   public update(delta: number) {
     super.update(delta);
-    this.nextPhase();
+    this.phase = this.nextPhase();
+  }
+
+  private nextPhase() {
+    const nextPhase = this.phaseStrategy.get(this.phase)();
+    this.phaseChangeEventCallIfNeed(nextPhase);
+    return nextPhase;
+  }
+
+  private phaseChangeEventCallIfNeed(nextPhase: GamePhase) {
+    if (this.phase !== nextPhase) {
+      this.phaseEvent.map(e => e(this.phase, nextPhase));
+    }
+  }
+
+  private summonPhase() {
+    if (
+      this.summonableCount < 0 ||  // 召喚可能数が0になる
+      this.hands.cards.every(  // キャラクターカードがない
+        card => card.cardStatus.type.every(
+          type => type !== CardType.Character)) ||
+      this.playerStrategy.goNextPhase()  // 次のフェーズに自ら移動しようとする
+    ) {
+      this.phaseWait -= 1;
+    }
+    // 次フェーズへ
+    if (this.phaseWait <= 0) {
+      this.phaseWait = 60;
+      return GamePhase.Buy;
+    }
+    return GamePhase.Summon;
+  }
+
+  private buyPhase() {
+    if (
+      this.buyableCount < 0 ||  // 購入可能数が0になる
+      this.hands.cards.reduce<number>(
+        (sum: number, { cardStatus: { value } }): number => sum + value, 0,
+      ) ||
+      this.playerStrategy.goNextPhase()
+    ) {
+      this.phaseWait -= 1;
+    }
+    // 次フェーズへ
+    if (this.phaseWait <= 0) {
+      this.phaseWait = 60;
+      return GamePhase.CleanUp;
+    }
+    return GamePhase.Buy;
+
+  }
+
+  private cleanUpPhase() {
+    this.phaseWait -= 1;
+    // 次フェーズへ
+    if (this.phaseWait <= 0) {
+      const handCards = this.hands.clear();
+      const fieldCards = this.hands.fields.clear();
+      [...handCards, ...fieldCards].map(card => this.trash.push(card));
+      this.phaseWait = 60;
+      return GamePhase.EndOfTurn;
+    }
+    return GamePhase.CleanUp;
   }
 
   private render() {

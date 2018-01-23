@@ -67,6 +67,7 @@ export default class CardList extends GameObject {
 
   clear(): Card[] {
     const cards = this.cardList;
+    cards.map(card => this.removeChild(card));
     this.cardList = [];
     this.sendEvent();
     return cards;

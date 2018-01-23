@@ -5,10 +5,10 @@ import setCardsPosition from './set-supplies-position';
 import { setWidthWithTextureAspect } from './sprite-utils';
 
 export default class Hands extends CardList {
+  public readonly fields: CardList;
   private isLocalPlayer: boolean = false;
   private isShowHands: boolean = true;
   private generatedEventListener: CardEventListener | null = null;
-  public readonly fields: CardList;
 
   constructor(cards: Card[]) {
     super(cards);
@@ -45,7 +45,9 @@ export default class Hands extends CardList {
         card.setVisible(true);
         setWidthWithTextureAspect(card, appConfig.width / 10);
       });
-      setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
+      if (this.count > 0) {
+        setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
+      }
     } else {
       this.visible = false;
     }

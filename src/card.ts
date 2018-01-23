@@ -13,10 +13,6 @@ interface CardStrategy {
   (cost: number): void;
 }
 
-function hideCardDetail() {
-  Card.cardDetail.visible = false;
-}
-
 export default class Card extends GameObject {
   public static cardDetail: CardDetail;
   public readonly cardStatus: CardStatus;
@@ -107,10 +103,16 @@ export default class Card extends GameObject {
   showCardDetail() {
     if (this.worldVisible && this.isFaced) {
       Card.cardDetail.visible = true;
-      Card.cardDetail.cardStatus = this.cardStatus;
+      Card.cardDetail.card = this;
     } else {
       this.mouseover = () => {};
       this.mouseout = () => {};
+    }
+  }
+
+  hideCardDetail() {
+    if (this.worldVisible && this.isFaced && Card.cardDetail.card === this) {
+      Card.cardDetail.visible = false;
     }
   }
 
@@ -118,7 +120,7 @@ export default class Card extends GameObject {
     if (this.isFaced) {
       this.interactive = true;
       this.mouseover = this.showCardDetail.bind(this);
-      this.mouseout = hideCardDetail;
+      this.mouseout = this.hideCardDetail.bind(this);
     } else {
       this.interactive = false;
     }

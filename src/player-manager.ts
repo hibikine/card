@@ -2,42 +2,63 @@ import { Text } from 'pixi.js';
 import GameObject from './game-object';
 import Player from './player';
 import CardStatus from './card-status';
-import appConfig from './app-config';
 import { randomChoice } from './utils';
 import GamePhase from './game-phase';
+import AutoRandomAIStrategy from './auto-random-ai-strategy';
+import LocalPlayerStrategy from './local-player-strategy';
+
+const gamePhaseName: Map<GamePhase, string> = new Map([
+  [GamePhase.Summon, '召喚フェーズ'],
+  [GamePhase.Buy, '購入フェーズ'],
+  [GamePhase.CleanUp, 'クリンナップフェーズ'],
+]);
 
 export default class PlayerManager extends GameObject {
   public players: Player[];
   private turnPlayer: Player;
   private turnPlayerText: Text;
+  private phaseText: Text;
 
   constructor(playerNumber: number, localPlayerPosition: number, initialDeck: CardStatus[]) {
     super();
     // プレイヤーの初期化
-    this.players = [];
+    const players: Player[] = [];
+    this.players = players;
     for (let i: number = 0; i < playerNumber; i += 1) {
-      this.players.push(new Player(initialDeck));
+      players.push(new Player(initialDeck));
     }
-    this.players[localPlayerPosition].setLocalPlayer();
-    this.players.map((player, i) => {
+    players[localPlayerPosition].setLocalPlayer();
+    players.map((player, i) => {
       player.setName(`プレイヤー${i + 1}`);
       player.setPlayerNumber(i);
+      player.playerStrategy = new AutoRandomAIStrategy(player);
     });
-    this.players.map(p => this.addChild(p));
+    players[localPlayerPosition].playerStrategy
+      = new LocalPlayerStrategy(players[localPlayerPosition]);
+
+    players.map(p => this.addChild(p));
 
     // ターンプレイヤーの設定
-    this.turnPlayer = randomChoice(this.players);
+    this.turnPlayer = randomChoice(players);
     this.turnPlayer.initTurn();
     this.turnPlayerText = new Text(this.turnPlayer.name, { fontSize: 30 });
-    this.addChild(this.turnPlayerText);
+    this.phaseText = new Text(
+      gamePhaseName.get(this.turnPlayer.getPhase()),
+      {
+        fontSize: 15,
+      });
+    this.phaseText.y = 30;
+    this.players.map((player) => {
+      player.phaseEvent.push((currentPhase, nextPhase) => {
+        if (nextPhase === GamePhase.EndOfTurn) {
+          return;
+        }
+        this.phaseText.text = gamePhaseName.get(nextPhase);
+      });
+    });
+    this.addChild(this.turnPlayerText, this.phaseText);
 
     this.render();
-  }
-
-  private setTurnPlayer(player: Player): Player {
-    this.turnPlayer = player;
-    this.render();
-    return player;
   }
 
   count() {
@@ -65,5 +86,12 @@ export default class PlayerManager extends GameObject {
 
       this.render();
     }
+  }
+
+  private setTurnPlayer(player: Player): Player {
+    this.turnPlayer = player;
+    this.turnPlayer.initTurn();
+    this.render();
+    return player;
   }
 }
