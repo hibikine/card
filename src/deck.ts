@@ -1,10 +1,9 @@
-import { loader } from 'pixi.js';
+import { Sprite, loader } from 'pixi.js';
 import { Image } from './files';
 import { randomInt } from './utils';
 import Card from './card';
 import CardStatus from './card-status';
-import CardList from './card-list';
-import Sprite = PIXI.Sprite;
+import CardList from './components/card-list';
 import { setWidthWithTextureAspect } from './sprite-utils';
 import appConfig from './app-config';
 

@@ -24,10 +24,10 @@ export default function setCardsPosition(
   offsetX: number = defaultValue.offsetX,
   offsetY: number = defaultValue.offsetY,
   scaleX: number = defaultValue.scaleX,
-  scaleY: number = defaultValue.scaleY,
+  scaleY: number = defaultValue.scaleY
 ) {
   supplies.map((v, i) => {
     v.x = (i % (supplies.length / row)) * v.width * scaleX + offsetX;
-    v.y = (i * row / supplies.length | 0) * v.height * scaleY + offsetY;
+    v.y = ((i * row / supplies.length) | 0) * v.height * scaleY + offsetY;
   });
 }

@@ -12,7 +12,7 @@ export function last<T>(array: T[]): T {
   return array[array.length - 1];
 }
 
-export interface SpriteAndText extends Container{
+export interface SpriteAndText extends Container {
   tint: number;
   width: number;
   height: number;

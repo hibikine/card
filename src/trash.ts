@@ -1,5 +1,5 @@
 import Card from './card';
-import CardList from './card-list';
+import CardList from './components/card-list';
 
 export default class Trash extends CardList {
   constructor() {
@@ -23,7 +23,7 @@ export default class Trash extends CardList {
 
   render(): void {
     this.position.set(400, 300);
-    this.cardList.map(v => v.visible = false);
+    this.cardList.map(v => (v.visible = false));
     if (!this.isEmpty()) {
       this.cardList[this.count - 1].visible = true;
     }

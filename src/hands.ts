@@ -1,8 +1,10 @@
 import Card from './card';
-import CardList, { CardEventListener } from './card-list';
+import CardList, { CardEventListener } from './components/card-list';
 import appConfig from './app-config';
 import setCardsPosition from './set-supplies-position';
 import { setWidthWithTextureAspect } from './sprite-utils';
+import IGameComponent from './game-component';
+import GameObject from './game-object';
 
 export default class Hands extends CardList {
   public readonly fields: CardList;
@@ -10,12 +12,16 @@ export default class Hands extends CardList {
   private isShowHands: boolean = true;
   private generatedEventListener: CardEventListener | null = null;
 
+  public get name() {
+    return 'Hands';
+  }
+
   constructor(cards: Card[]) {
     super(cards);
-    this.visible = false;
+    this.gameObject.visible = false;
     this.addCardEventListener(this.render.bind(this));
     this.fields = new CardList();
-    this.addChild(this.fields);
+    this.gameObject.addChild(this.fields.gameObject);
     this.render();
   }
 
@@ -40,13 +46,20 @@ export default class Hands extends CardList {
 
   render(): void {
     if (this.isLocalPlayer && this.isShowHands) {
-      this.visible = true;
-      this.cards.map((card) => {
+      if (this.gameObject != null) {
+        this.gameObject.visible = true;
+      }
+      this.cards.map(card => {
         card.setVisible(true);
-        setWidthWithTextureAspect(card, appConfig.width / 10);
+        setWidthWithTextureAspect(card.gameObject, appConfig.width / 10);
       });
       if (this.count > 0) {
-        setCardsPosition(this.cards, 1, 100, appConfig.height - this.cards[0].height);
+        setCardsPosition(
+          this.cards.map(c => c.gameObject),
+          1,
+          100,
+          appConfig.height - this.cards[0].gameObject.height
+        );
       }
     } else {
       this.visible = false;

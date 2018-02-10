@@ -26,25 +26,27 @@ export default class GameManager {
    * @param {number} localPlayerPosition
    * @param {CardStatus[]} initialDeck
    */
-  init(playerNumber: number,
-       characterSupplies: Supply[],
-       cardStatusList: CardStatusList,
-       root: Container,
-       localPlayerPosition: number = 0,
-       initialDeck?: CardStatus[]) {
+  init(
+    playerNumber: number,
+    characterSupplies: Supply[],
+    cardStatusList: CardStatusList,
+    root: Container,
+    localPlayerPosition: number = 0,
+    initialDeck?: CardStatus[]
+  ) {
     this.cardStatusList = cardStatusList;
 
     if (initialDeck === undefined) {
       this.playerManager = new PlayerManager(
         playerNumber,
         localPlayerPosition,
-        cardStatusList.generateInitialDeck(),
+        cardStatusList.generateInitialDeck()
       );
     } else {
       this.playerManager = new PlayerManager(
         playerNumber,
         localPlayerPosition,
-        initialDeck,
+        initialDeck
       );
     }
 
@@ -53,7 +55,7 @@ export default class GameManager {
       playerNumber,
       characterSupplies,
       this.cardStatusList.generateEnergySupplies(),
-      this.cardStatusList.generateScoreSupplies(),
+      this.cardStatusList.generateScoreSupplies()
     );
 
     Card.cardDetail = new CardDetail();

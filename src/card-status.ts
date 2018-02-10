@@ -27,7 +27,7 @@ export default class CardStatus {
     texture: Texture,
     type: CardType[],
     text: string = '',
-    value: number = 0,
+    value: number = 0
   ) {
     this.id = id;
     this.cost = cost;
@@ -36,6 +36,5 @@ export default class CardStatus {
     this.type = type;
     this.text = text;
     this.value = value;
-
   }
 }

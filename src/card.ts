@@ -1,11 +1,12 @@
 import { Sprite, Text, loader, interaction } from 'pixi.js';
 import CardStatus from './card-status';
-import GameObject from './game-object';
 import { Image } from './files';
 import { setWidthWithTextureAspect } from './sprite-utils';
 import style from './style';
 import { SpriteAndText } from './utils';
 import CardDetail from './card-detail';
+import IGameComponent from './game-component';
+import GameObject from './game-object';
 
 const { resources } = loader;
 
@@ -13,7 +14,8 @@ interface CardStrategy {
   (cost: number): void;
 }
 
-export default class Card extends GameObject {
+export default class Card implements IGameComponent {
+  public gameObject: GameObject;
   public static cardDetail: CardDetail;
   public readonly cardStatus: CardStatus;
   private readonly sprite: Sprite;
@@ -25,20 +27,36 @@ export default class Card extends GameObject {
   private isFaced: boolean = true;
   private mouseover: () => void;
   private mouseout: () => void;
+  get name(): string {
+    return 'Card';
+  }
+
+  public clone(): IGameComponent {
+    const cloneCard = new Card(this.cardStatus);
+    return cloneCard;
+  }
+  public dispose() {
+    this.gameObject = null;
+  }
+  public setGameObject(gameObject: GameObject): GameObject {
+    this.gameObject.addChild(this.sprite);
+    this.gameObject.addChild(this.nameText, this.costText, this.picture);
+    this.render();
+    return gameObject;
+  }
 
   constructor(cardStatus: CardStatus) {
-    super();
-
     this.sprite = new Sprite(resources[Image.Card].texture);
-    super.addChild(this.sprite);
-
     this.cardStatus = cardStatus;
 
     this.nameText = new Text(cardStatus.name, style.card.nameText.style);
     this.nameText.x = style.card.nameText.x;
     this.nameText.y = style.card.nameText.y;
 
-    this.costText = new Text(String(cardStatus.cost), style.card.costText.style);
+    this.costText = new Text(
+      String(cardStatus.cost),
+      style.card.costText.style
+    );
     this.costText.x = style.card.costText.x;
     this.costText.y = style.card.costText.y;
 
@@ -47,17 +65,12 @@ export default class Card extends GameObject {
     this.picture.x = style.card.picture.x;
     this.picture.y = style.card.picture.y;
 
-    this.addChild(
-      this.nameText,
-      this.costText,
-      this.picture,
-    );
-
     this.components = [this.sprite, this.nameText, this.costText, this.picture];
 
     setWidthWithTextureAspect(this.sprite, style.card.sprite.width);
     this.render();
   }
+  update(delta: number) {}
 
   setFace(isFaced: boolean) {
     if (this.isFaced !== isFaced) {
@@ -92,7 +105,7 @@ export default class Card extends GameObject {
   }
 
   setVisible(visible: boolean) {
-    this.visible = visible;
+    this.gameObject.visible = visible;
     this.render();
   }
 
@@ -101,7 +114,7 @@ export default class Card extends GameObject {
   }
 
   showCardDetail() {
-    if (this.worldVisible && this.isFaced) {
+    if (this.gameObject.worldVisible && this.isFaced) {
       Card.cardDetail.visible = true;
       Card.cardDetail.card = this;
     } else {
@@ -111,18 +124,22 @@ export default class Card extends GameObject {
   }
 
   hideCardDetail() {
-    if (this.worldVisible && this.isFaced && Card.cardDetail.card === this) {
+    if (
+      this.gameObject.worldVisible &&
+      this.isFaced &&
+      Card.cardDetail.card === this
+    ) {
       Card.cardDetail.visible = false;
     }
   }
 
   render() {
     if (this.isFaced) {
-      this.interactive = true;
+      this.gameObject.interactive = true;
       this.mouseover = this.showCardDetail.bind(this);
       this.mouseout = this.hideCardDetail.bind(this);
     } else {
-      this.interactive = false;
+      this.gameObject.interactive = false;
     }
   }
 }

@@ -18,5 +18,4 @@ script:
   - yarn build
   - mkdir -p build/logs
   - yarn test
-  - cd application/tests
-  - phpunit --coverage-clover ../../build/logs/clover.xml tests
+  - phpunit --coverage-clover ../../build/logs/clover.xml 

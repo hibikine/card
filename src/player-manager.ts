@@ -18,8 +18,11 @@ export default class PlayerManager extends GameObject {
   private turnPlayer: Player;
   private turnPlayerText: Text;
   private phaseText: Text;
-
-  constructor(playerNumber: number, localPlayerPosition: number, initialDeck: CardStatus[]) {
+  constructor(
+    playerNumber: number,
+    localPlayerPosition: number,
+    initialDeck: CardStatus[]
+  ) {
     super();
     // プレイヤーの初期化
     const players: Player[] = [];
@@ -33,8 +36,9 @@ export default class PlayerManager extends GameObject {
       player.setPlayerNumber(i);
       player.playerStrategy = new AutoRandomAIStrategy(player);
     });
-    players[localPlayerPosition].playerStrategy
-      = new LocalPlayerStrategy(players[localPlayerPosition]);
+    players[localPlayerPosition].playerStrategy = new LocalPlayerStrategy(
+      players[localPlayerPosition]
+    );
 
     players.map(p => this.addChild(p));
 
@@ -42,13 +46,11 @@ export default class PlayerManager extends GameObject {
     this.turnPlayer = randomChoice(players);
     this.turnPlayer.initTurn();
     this.turnPlayerText = new Text(this.turnPlayer.name, { fontSize: 30 });
-    this.phaseText = new Text(
-      gamePhaseName.get(this.turnPlayer.getPhase()),
-      {
-        fontSize: 15,
-      });
+    this.phaseText = new Text(gamePhaseName.get(this.turnPlayer.getPhase()), {
+      fontSize: 15,
+    });
     this.phaseText.y = 30;
-    this.players.map((player) => {
+    this.players.map(player => {
       player.phaseEvent.push((currentPhase, nextPhase) => {
         if (nextPhase === GamePhase.EndOfTurn) {
           return;
@@ -74,14 +76,13 @@ export default class PlayerManager extends GameObject {
     this.turnPlayer.update(delta);
     if (this.turnPlayer.getPhase() === GamePhase.EndOfTurn) {
       // ターンプレイヤーを1つ進める
-      this.setTurnPlayer(this.players.reduce(
-        (accumulator, player, index): Player => {
+      this.setTurnPlayer(
+        this.players.reduce((accumulator, player, index): Player => {
           if (player === this.turnPlayer) {
             return this.players[(index + 1) % this.players.length];
           }
           return accumulator;
-        },
-        null),
+        }, null)
       );
 
       this.render();
