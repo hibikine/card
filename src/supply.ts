@@ -21,7 +21,9 @@ export default class Supply extends GameObject {
     this.setAvailability(true);
 
     const numberTextFontSize = 100;
-    this.numberText = new Text(this.size.toString(), { fontSize: numberTextFontSize });
+    this.numberText = new Text(this.size.toString(), {
+      fontSize: numberTextFontSize,
+    });
     this.numberText.anchor.set(1, 1);
     this.numberText.x = this.card.width;
     this.numberText.y = this.card.height;

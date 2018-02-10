@@ -23,7 +23,7 @@ export default class Trash extends CardList {
 
   render(): void {
     this.position.set(400, 300);
-    this.cardList.map(v => v.visible = false);
+    this.cardList.map(v => (v.visible = false));
     if (!this.isEmpty()) {
       this.cardList[this.count - 1].visible = true;
     }

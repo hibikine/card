@@ -56,7 +56,10 @@ export const defaultCardStatusObject: CardStatusObject[] = [
   },
 ];
 
-export function generateSupplies(cardStatuses: CardStatus[], size: number = 10) {
+export function generateSupplies(
+  cardStatuses: CardStatus[],
+  size: number = 10
+) {
   return cardStatuses.map(v => new Supply().init(v, size));
 }
 
@@ -64,16 +67,20 @@ export default class CardStatusList extends Array<CardStatus> {
   constructor(additionalCardObjects: CardStatusObject[] = []) {
     const cardObjects = [...defaultCardStatusObject, ...additionalCardObjects];
     super(cardObjects.length);
-    this.push(...cardObjects.map((v, i) =>
-      new CardStatus(
-        i,
-        v.cost,
-        v.name,
-        loader.resources[v.image].texture,
-        v.type,
-        v.text,
-        v.value,
-      )));
+    this.push(
+      ...cardObjects.map(
+        (v, i) =>
+          new CardStatus(
+            i,
+            v.cost,
+            v.name,
+            loader.resources[v.image].texture,
+            v.type,
+            v.text,
+            v.value
+          )
+      )
+    );
   }
 
   searchByCardType(cardType: CardType): CardStatus[] {
@@ -82,14 +89,18 @@ export default class CardStatusList extends Array<CardStatus> {
 
   generateEnergySupplies(): Supply[] {
     return generateSupplies(
-      [CardType.Energy1, CardType.Energy2, CardType.Energy3]
-        .map(v => this.searchByCardType(v)[0]));
+      [CardType.Energy1, CardType.Energy2, CardType.Energy3].map(
+        v => this.searchByCardType(v)[0]
+      )
+    );
   }
 
   generateScoreSupplies(): Supply[] {
     return generateSupplies(
-      [CardType.Score1, CardType.Score2, CardType.Score3]
-        .map(v => this.searchByCardType(v)[0]));
+      [CardType.Score1, CardType.Score2, CardType.Score3].map(
+        v => this.searchByCardType(v)[0]
+      )
+    );
   }
 
   generateInitialDeck(): CardStatus[] {

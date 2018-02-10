@@ -6,4 +6,3 @@ enum GamePhase {
 }
 
 export default GamePhase;
-

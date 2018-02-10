@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "outDir": "./public/",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es6",
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "strictPropertyInitialization": true
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true,

@@ -20,16 +20,16 @@ export default class CardDetail extends GameObject {
 
   constructor() {
     super();
-    const { picture, text, nameText, costText } = this;
-
     const cardBack = new Sprite(resources[Image.CardTall].texture);
     this.cardBack = cardBack;
 
     this.position.set(style.cardDetail.x, style.cardDetail.y);
-    [cardBack, picture, text, nameText, costText].map((component) => {
-      component.anchor.set(1, 1);
-      this.addChild(component);
-    });
+    [cardBack, this.picture, this.text, this.nameText, this.costText].map(
+      component => {
+        component.anchor.set(1, 1);
+        this.addChild(component);
+      }
+    );
 
     this.text.anchor.set(0, 0);
     this.text.x = -this.cardBack.texture.width;
@@ -50,15 +50,14 @@ export default class CardDetail extends GameObject {
   }
 
   set card(card: Card) {
-    const { picture, text, costText, nameText, cardBack } = this;
     const { cardStatus } = card;
     this.cardObject = card;
-    picture.texture = cardStatus.texture;
-    text.text = cardStatus.text;
-    costText.text = cardStatus.cost.toString();
-    nameText.text = cardStatus.name;
-    picture.x = -10;
-    picture.y = -cardBack.height + 40 + picture.texture.height;
-    setWidthWithTextureAspect(picture, 300);
+    this.picture.texture = cardStatus.texture;
+    this.text.text = cardStatus.text;
+    this.costText.text = cardStatus.cost.toString();
+    this.nameText.text = cardStatus.name;
+    this.picture.x = -10;
+    this.picture.y = -this.cardBack.height + 40 + this.picture.texture.height;
+    setWidthWithTextureAspect(this.picture, 300);
   }
 }

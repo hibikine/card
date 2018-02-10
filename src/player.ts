@@ -37,8 +37,7 @@ export default class Player extends GameObject {
     [GamePhase.Summon, this.summonPhase.bind(this)],
     [GamePhase.Buy, this.buyPhase.bind(this)],
     [GamePhase.CleanUp, this.cleanUpPhase.bind(this)],
-    [GamePhase.EndOfTurn, () => {
-    }],
+    [GamePhase.EndOfTurn, () => {}],
   ]);
 
   constructor(initialDeck: CardStatus[]) {
@@ -57,23 +56,20 @@ export default class Player extends GameObject {
     {
       this.handNumberText = new Text(
         this.hands.count.toString(),
-        style.player.handNumberText.style);
+        style.player.handNumberText.style
+      );
 
-      const { handNumberText, sprite } = this;
-      handNumberText.anchor.set(1, 1);
-      handNumberText.position.set(sprite.width, sprite.height);
-      sprite.addChild(handNumberText);
+      this.handNumberText.anchor.set(1, 1);
+      this.handNumberText.position.set(this.sprite.width, this.sprite.height);
+      this.sprite.addChild(this.handNumberText);
     }
 
     {
-      this.nameText = new Text(
-        this.name,
-        { fontSize: 50, fill: 0xffffff });
+      this.nameText = new Text(this.name, { fontSize: 50, fill: 0xffffff });
 
-      const { nameText, sprite } = this;
-      nameText.anchor.set(0, 0);
-      nameText.position.set(0, 0);
-      sprite.addChild(nameText);
+      this.nameText.anchor.set(0, 0);
+      this.nameText.position.set(0, 0);
+      this.sprite.addChild(this.nameText);
     }
 
     this.localPlayerText = new Text('あなた', { fontSize: 50, fill: 0xffffff });
@@ -82,12 +78,7 @@ export default class Player extends GameObject {
     this.localPlayerText.anchor.set(0, 0);
     this.sprite.addChild(this.localPlayerText);
 
-    this.addChild(
-      this.sprite,
-      this.hands,
-      this.deck,
-      this.trash,
-    );
+    this.addChild(this.sprite, this.hands, this.deck, this.trash);
 
     this.render();
 
@@ -129,11 +120,9 @@ export default class Player extends GameObject {
 
   public setLocalPlayer(isLocalPlayer: boolean = true) {
     this.isLocalPlayer = isLocalPlayer;
-    [
-      this.hands,
-      this.trash,
-      this.deck,
-    ].map(cardList => cardList.setLocalPlayer(isLocalPlayer));
+    [this.hands, this.trash, this.deck].map(cardList =>
+      cardList.setLocalPlayer(isLocalPlayer)
+    );
     this.localPlayerText.visible = isLocalPlayer;
   }
 
@@ -170,11 +159,12 @@ export default class Player extends GameObject {
 
   private summonPhase() {
     if (
-      this.summonableCount < 0 ||  // 召喚可能数が0になる
-      this.hands.cards.every(  // キャラクターカードがない
-        card => card.cardStatus.type.every(
-          type => type !== CardType.Character)) ||
-      this.playerStrategy.goNextPhase()  // 次のフェーズに自ら移動しようとする
+      this.summonableCount < 0 || // 召喚可能数が0になる
+      this.hands.cards.every(
+        // キャラクターカードがない
+        card => card.cardStatus.type.every(type => type !== CardType.Character)
+      ) ||
+      this.playerStrategy.goNextPhase() // 次のフェーズに自ら移動しようとする
     ) {
       this.phaseWait -= 1;
     }
@@ -188,9 +178,10 @@ export default class Player extends GameObject {
 
   private buyPhase() {
     if (
-      this.buyableCount < 0 ||  // 購入可能数が0になる
+      this.buyableCount < 0 || // 購入可能数が0になる
       this.hands.cards.reduce<number>(
-        (sum: number, { cardStatus: { value } }): number => sum + value, 0,
+        (sum: number, { cardStatus: { value } }): number => sum + value,
+        0
       ) ||
       this.playerStrategy.goNextPhase()
     ) {
@@ -202,7 +193,6 @@ export default class Player extends GameObject {
       return GamePhase.CleanUp;
     }
     return GamePhase.Buy;
-
   }
 
   private cleanUpPhase() {
@@ -219,14 +209,13 @@ export default class Player extends GameObject {
   }
 
   private render() {
-    const { playerNumber, sprite } = this;
     const { width } = appConfig;
 
     {
-      const x = width / 5 * (1 + playerNumber);
+      const x = width / 5 * (1 + this.playerNumber);
 
-      sprite.x = x;
-      setWidthWithTextureAspect(sprite, width / 8);
+      this.sprite.x = x;
+      setWidthWithTextureAspect(this.sprite, width / 8);
     }
   }
 }

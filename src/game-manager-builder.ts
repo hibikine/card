@@ -54,7 +54,8 @@ export default class GameManagerBuilder {
       this.cardStatusList,
       this.root,
       this.localPlayerPosition,
-      this.initialDeck);
+      this.initialDeck
+    );
     return this.gameManager;
   }
 }

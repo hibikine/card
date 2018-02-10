@@ -17,11 +17,12 @@ export default class SupplyList extends GameObject {
   /**
    * サプライを初期化する
    */
-  initSupply(playerNumber: number,
-             characterSupplies: Supply[],
-             energySupplies: Supply[],
-             scoreSupplies: Supply[]) {
-
+  initSupply(
+    playerNumber: number,
+    characterSupplies: Supply[],
+    energySupplies: Supply[],
+    scoreSupplies: Supply[]
+  ) {
     this.characterSupplies = characterSupplies;
     this.energySupplies = energySupplies;
     this.scoreSupplies = scoreSupplies;
@@ -34,8 +35,8 @@ export default class SupplyList extends GameObject {
     this.supplies.map(s => this.addChild(s));
 
     // カードサイズ
-    this.supplies.map((supply) => {
-      setWidthWithTextureAspect(supply,  appConfig.width / 9);
+    this.supplies.map(supply => {
+      setWidthWithTextureAspect(supply, appConfig.width / 9);
     });
 
     // サプライの位置
@@ -50,7 +51,9 @@ export default class SupplyList extends GameObject {
       setSuppliesPosition(this.scoreSupplies, 1, offsetX, lastCard.y, scaleX);
     }
 
-    this.characterSupplies.map(v => v.setSize(supplyNumberTable[playerNumber].characterSupplies));
+    this.characterSupplies.map(v =>
+      v.setSize(supplyNumberTable[playerNumber].characterSupplies)
+    );
     // TODO:
   }
 
@@ -76,7 +79,10 @@ export default class SupplyList extends GameObject {
    */
   isSupplyEmptied() {
     return (
-      this.characterSupplies.reduce((count, v) => count + (v.isEmpty() ? 1 : 0), 0) >= 3 ||
+      this.characterSupplies.reduce(
+        (count, v) => count + (v.isEmpty() ? 1 : 0),
+        0
+      ) >= 3 ||
       this.energySupplies.some(v => v.isEmpty()) ||
       this.scoreSupplies.some(v => v.isEmpty())
     );

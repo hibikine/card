@@ -1,7 +1,16 @@
 {
-  "extends": "tslint-config-airbnb",
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
   "rules": {
     "import-name": false,
-    "no-console": true
+    "no-console": true,
+    "prettier": [
+      true,
+      {
+        "singleQuote": true,
+        "semi": true,
+        "trailingComma": "es5"
+      }
+    ]
   }
 }
