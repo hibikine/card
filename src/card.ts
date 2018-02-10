@@ -1,12 +1,12 @@
 import { Sprite, Text, loader, interaction } from 'pixi.js';
 import CardStatus from './card-status';
-import IGameObject from './i-game-object';
 import { Image } from './files';
 import { setWidthWithTextureAspect } from './sprite-utils';
 import style from './style';
 import { SpriteAndText } from './utils';
 import CardDetail from './card-detail';
 import IGameComponent from './game-component';
+import GameObject from './game-object';
 
 const { resources } = loader;
 
@@ -15,7 +15,7 @@ interface CardStrategy {
 }
 
 export default class Card implements IGameComponent {
-  private gameObject: IGameObject;
+  public gameObject: GameObject;
   public static cardDetail: CardDetail;
   public readonly cardStatus: CardStatus;
   private readonly sprite: Sprite;

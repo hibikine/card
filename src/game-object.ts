@@ -1,8 +1,7 @@
 import { Container } from 'pixi.js';
-import IGameObject from './i-game-object';
 import IGameComponent from './game-component';
 
-export default class GameObject extends Container implements IGameObject {
+export default class GameObject extends Container {
   private components: IGameComponent[];
   private isGameObjectDestroy: boolean = false;
   constructor() {

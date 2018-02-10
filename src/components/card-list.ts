@@ -1,15 +1,30 @@
-import GameObject from './game-object';
-import Card from './card';
+import GameObject from '../game-object';
+import Card from '../card';
 import Container = PIXI.Container;
+import IGameComponent from '../game-component';
 
 export type CardEventListener = (cardList: CardList) => void;
 
-export default class CardList extends GameObject {
+export default class CardList implements IGameComponent {
   protected cardList: Card[] = [];
   private eventListener: CardEventListener[] = [];
+  public gameObject?: GameObject;
+  public dispose(): void {}
+
+  public get name() {
+    return 'CardList';
+  }
+  public update(delta: number): void {}
+  public clone(): IGameComponent {
+    return new CardList();
+  }
+  public setGameObject(gameObject: GameObject): GameObject {
+    this.gameObject = gameObject;
+    this.cardList.map(c => gameObject.addChild(c.gameObject));
+    return gameObject;
+  }
 
   constructor(cards: Card[] = []) {
-    super();
     if (cards.length === 1) {
       this.push(cards[0]);
     } else if (cards.length > 1) {
@@ -21,34 +36,39 @@ export default class CardList extends GameObject {
     this.eventListener.map(e => e(this));
   }
 
-  addCardEventListener(callback: CardEventListener) {
+  public addCardEventListener(callback: CardEventListener) {
     this.eventListener.push(callback);
   }
 
-  deleteCardEventListener(callback: CardEventListener) {
+  public deleteCardEventListener(callback: CardEventListener) {
     this.eventListener = this.eventListener.filter(e => e !== callback);
   }
 
-  get cards() {
+  public get cards() {
     return this.cardList;
   }
 
-  get count() {
+  public get count() {
     return this.cards.length;
   }
 
-  push(card: Card, ...cards: Card[]) {
+  public push(card: Card, ...cards: Card[]) {
     this.cardList.push(card, ...cards);
     this.addChildCard(card, ...cards);
     this.sendEvent();
     return card;
   }
 
-  addChildCard(card: Card, ...cards: Card[]) {
-    this.addChild(card, ...cards);
+  protected addChildCard(card: Card, ...cards: Card[]) {
+    if (this.gameObject != null) {
+      this.gameObject.addChild(
+        card.gameObject,
+        ...cards.map(c => c.gameObject)
+      );
+    }
   }
 
-  push_back(card: Card, ...cards: Card[]) {
+  public push_back(card: Card, ...cards: Card[]) {
     this.addChildCard(card, ...cards);
     this.cardList = cards.concat(this.cardList);
     this.sendEvent();
@@ -60,14 +80,14 @@ export default class CardList extends GameObject {
 
   pop(): Card {
     const card = this.cardList.pop();
-    this.removeChild(card);
+    this.gameObject.removeChild(card.gameObject);
     this.sendEvent();
     return card;
   }
 
   clear(): Card[] {
     const cards = this.cardList;
-    cards.map(card => this.removeChild(card));
+    cards.map(card => this.gameObject.removeChild(card.gameObject));
     this.cardList = [];
     this.sendEvent();
     return cards;
@@ -75,7 +95,7 @@ export default class CardList extends GameObject {
 
   remove(...cards: Card[]) {
     this.cardList = this.cards.filter(v => cards.indexOf(v) !== -1);
-    cards.map(v => this.removeChild(v));
+    cards.map(v => this.gameObject.removeChild(v));
     this.sendEvent();
     return cards;
   }

@@ -68,6 +68,7 @@
         "useBabelrc": true
       }
     },
+    "setupFiles": ["<rootDir>/setup-file.js"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

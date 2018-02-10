@@ -1,5 +1,5 @@
 import Card from './card';
-import CardList from './card-list';
+import CardList from './components/card-list';
 
 export default class Trash extends CardList {
   constructor() {
