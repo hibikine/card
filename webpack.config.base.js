@@ -1,11 +1,14 @@
-const { CheckerPlugin } = require('awesome-typescript-loader');
-const path = require('path');
+const { CheckerPlugin } = require("awesome-typescript-loader");
+const path = require("path");
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.tsx'),
+  entry: {
+    index: path.resolve(__dirname, "src/index.ts"),
+    server: path.resolve(__dirname, "src/server.ts")
+  },
   output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'index.js',
+    path: path.resolve(__dirname, "public"),
+    filename: "[name].js"
   },
   module: {
     /* ファイルローダーなどの設定 */
@@ -16,55 +19,54 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env'],
+              presets: ["@babel/preset-env"]
               // plugins: [require('@babel/plugin-transform-object-rest-spread')]
-            },
-          },{
-            loader: 'tslint-loader'
+            }
+          },
+          {
+            loader: "tslint-loader"
           }
-        ],
+        ]
       },
       /* TypeScript */
       {
         test: /\.tsx?$/,
         use: [
           {
-            loader: 'awesome-typescript-loader',
+            loader: "awesome-typescript-loader"
           },
           {
-            loader: 'tslint-loader'
+            loader: "tslint-loader"
           }
         ],
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       /* SASS */
       {
         test: /\.scss$/,
         use: [
-          { loader: 'style-loader' },
+          { loader: "style-loader" },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
-              sourceMap: true,
-            },
-          },
+              sourceMap: true
+            }
+          }
         ],
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: [".ts", ".tsx", ".js", ".jsx"]
   },
-  plugins: [
-    new CheckerPlugin(),
-  ]
+  plugins: [new CheckerPlugin()]
 };
