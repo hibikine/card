@@ -8,11 +8,13 @@
   "scripts": {
     "build": "webpack",
     "docker": "docker-compose up --build",
+    "docker-bash": "docker exec -it card_php_1 bash",
     "start": "webpack-dev-server",
     "watch": "webpack --watch",
     "test": "jest",
     "prettier": "prettier",
     "precommit": "lint-staged",
+    "commit": "git-cz",
     "tslint": "tslint --fix **/*.ts"
   },
   "dependencies": {
@@ -23,7 +25,8 @@
     "react-router": "^4.2.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.37",
@@ -36,6 +39,7 @@
     "@types/socket.io": "^1.4.31",
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^7.0.0-0",
+    "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.14.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.0.0",
@@ -67,27 +71,11 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   },
   "lint-staged": {
-    "*.js": [
-      "yarn tslint",
-      "git add"
-    ],
-    "*.ts": [
-      "yarn tslint",
-      "git add"
-    ],
-    "*.tsx": [
-      "yarn tslint",
-      "git add"
-    ]
+    "*.js": ["yarn tslint", "git add"],
+    "*.ts": ["yarn tslint", "git add"],
+    "*.tsx": ["yarn tslint", "git add"]
   }
 }
