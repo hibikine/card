@@ -15,13 +15,16 @@ services:
     ports:
       - "$KVS_PORT:6379"
   php:
-    image: "php:${PHP_VERSION}-apache"
+    build:
+      context: "./docker/php"
+      args:
+        PHP_VERSION: "$PHP_VERSION"
+        APACHE_DOCUMENT_ROOT: "$APACHE_DOCUMENT_ROOT"
     volumes:
       - "$WEBRBOOT:/var/www/html"
     ports:
       - "$HTTP_PORT:80"
     environment:
-      - "APACHE_DOCUMENT_ROOT=$APACHE_DOCUMENT_ROOT"
       - "MYSQL_USER=$RDB_USER"
       - "RDB_PASSWORD=$RDB_PASSWORD"
     links:
